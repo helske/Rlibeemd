@@ -1,0 +1,10 @@
+Package: libeemd
+Type: Package
+Title: libeemd: Ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN)
+Version: 1.0
+Date: 2014-10-20
+Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),email = "jouni.helske@jyu.fi"), person(given = "Perttu", family = "Luukko", role = "aut")) 
+Description:  Package libeemd contains functions for the ensemble empirical mode decomposition (EEMD), its complete variant (CEEMDAN) or the regular empirical mode decomposition (EMD).
+License: GPL 3
+Imports: Rcpp (>= 0.11.0)
+LinkingTo: Rcpp
