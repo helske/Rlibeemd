@@ -16,14 +16,14 @@
 #' @export
 #' @name ceemdan
 #' @inheritParams eemd
-#' @return Matrix of size MxN, where M = \code{emd_num_imfs}(N). The rows of the array are the
-#'        IMFs of the input signal, with the last row being the final residual.
+#' @return Matrix of size NxM, where M = \code{emd_num_imfs}(N). The columns of the array are the
+#'        IMFs of the input signal, with the last column being the final residual.
 #' @references M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
 #'   IEEE Int. Conf. on Acoust., Speech and Signal Proc. ICASSP-11,
 #'   (2011) 4144-4147
 #' @seealso \code{\link{eemd}} 
-ceemdan <- function(input, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 0L, rng_seed = 0L) {
-    .Call('libeemd_ceemdanR', PACKAGE = 'libeemd', input, ensemble_size, noise_strength, S_number, num_siftings, rng_seed)
+ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L) {
+    .Call('Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed)
 }
 
 #' EEMD Decomposition
@@ -39,32 +39,49 @@ ceemdan <- function(input, ensemble_size = 250L, noise_strength = 0.2, S_number 
 #'
 #' @export
 #' @name eemd
-#' @param input Vector of length N. he input signal to decompose.
+#' @param input Vector of length N. The input signal to decompose.
+#' @param num_imfs Number of Intrinsic Mode Functions (IMFs) to compute. If num_imfs is set to zero, a value of
+#'        num_imfs = emd_num_imfs(N) will be used, which corresponds to a maximal number of
+#'        IMFs. Note that the final residual is also counted as an IMF in this
+#'        respect, so you most likely want at least num_imfs=2.
 #' @param ensemble_size Number of copies of the input signal to use as the ensemble.
 #' @param noise_strength Standard deviation of the Gaussian random numbers used as additional
-#'         noise. **This value is relative** to the standard deviation of the input signal.
-#' @param S_number Integer. Use the S-number stopping criterion [2] for the EMD procedure with the given values of `S`.
+#'         noise. \bold{This value is relative} to the standard deviation of the input signal.
+#' @param S_number Integer. Use the S-number stopping criterion [2] for the EMD procedure with the given values of S.
 #'        That is, iterate until the number of extrema and zero crossings in the
 #'        signal differ at most by one, and stay the same for S consecutive
 #'        iterations. Typical values are in the range 3--8. If \code{S_number} is
-#'        zero, this stopping criterion is ignored.      
+#'        zero, this stopping criterion is ignored. Default is 4.
 #' @param num_siftings Use a maximum number of siftings as a stopping criterion. If
-#'        `num_siftings` is zero, this stopping criterion is ignored.
+#'        \code{num_siftings} is zero, this stopping criterion is ignored. Default is 50.
 #' @param rng_seed A seed for the random number generator. A value of zero denotes
 #'        an implementation-defined default value.
-#' @return Matrix of size MxN, where M = \code{emd_num_imfs}(N). The rows of the array are the
-#'        IMFs of the input signal, with the last row being the final residual.
+#' @return Matrix of size NxM, where M = \code{emd_num_imfs}(N). The columns of the array are the
+#'        IMFs of the input signal, with the last column being the final residual.
 #' 
 #' @references
 #'       [1] Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A 
 #'       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
-#'       Vol. 1 (2009) 1–41 \cr
+#'       Vol. 1 (2009) 1-41 \cr
 #'       [2] N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
 #'       waves: The Hilbert spectrum", Annual Review of Fluid Mechanics, Vol. 31
-#'       (1999) 417–457
-#' @seealso \code{\link{emd}}
-eemd <- function(input, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 0L, rng_seed = 0L) {
-    .Call('libeemd_eemdR', PACKAGE = 'libeemd', input, ensemble_size, noise_strength, S_number, num_siftings, rng_seed)
+#'       (1999) 417-457
+#' @seealso \code{\link{ceemdan}}
+eemd <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L) {
+    .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed)
+}
+
+#' Number of IMFs
+#' 
+#' Return the number of IMFs extracted from input data of length N, including
+#' the final residual. This is just 1+[log_2(N)] for N>3.
+#' @export
+#' @name nIMFs
+#' @param N An integer defining the length of input data.
+#' @return The number of IMFs which would be extracted from input data of length N, including
+#' the final residual.
+emd_num_imfs <- function(N) {
+    .Call('Rlibeemd_emd_num_imfsR', PACKAGE = 'Rlibeemd', N)
 }
 
 #' Find the local extrema of the input data
@@ -79,9 +96,9 @@ eemd <- function(input, ensemble_size = 250L, noise_strength = 0.2, S_number = 4
 #'
 #' @references Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A
 #'       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
-#'       Vol. 1 (2009) 1–41
+#'       Vol. 1 (2009) 1-41
 extrema <- function(x) {
-    .Call('libeemd_extrema', PACKAGE = 'libeemd', x)
+    .Call('Rlibeemd_extrema', PACKAGE = 'Rlibeemd', x)
 }
 
 #' Cubic Spline Interpolation
@@ -97,6 +114,6 @@ extrema <- function(x) {
 #' @param x,y Vectors giving the coordinates of the nodes.
 #' @return The cubic spline curve.
 cspline <- function(x, y) {
-    .Call('libeemd_cspline', PACKAGE = 'libeemd', x, y)
+    .Call('Rlibeemd_cspline', PACKAGE = 'Rlibeemd', x, y)
 }
 

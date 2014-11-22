@@ -1,0 +1,22 @@
+b <- c(
+bibentry(
+bibtype = "Manual",
+title = "{Rlibeemd}: Ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN)",
+author = c(person(given = "Jouni", family = "Helske", role =
+    c("aut","cre"), comment = "R interface",email = "jouni.helske@jyu.fi"), person(given = "Perttu",
+    family = "Luukko", role = "aut", comment = "Original libeemd C library")),
+year = "2014",
+note = "R package version 1.1.0",
+url = "https://github.com/helske/Rlibeemd",
+key = "Rlibeemd"
+),
+
+bibentry(
+bibtype = "Article",
+title = "Introducing libeemd: a C library and a Python module for performing the ensemble empirical mode decomposition",
+author = "Perttu J.J. Luukko, Jouni Helske, Esa Räsänen",
+journal = "Submitted.",
+year = "2014",
+key = "libeemd"
+)
+)

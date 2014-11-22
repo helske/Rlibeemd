@@ -181,28 +181,35 @@ void free_eemd_workspace(eemd_workspace* w) {
 
 // Forward declaration of a helper function used internally for making a single
 // EMD run with a preallocated workspace
-static void _emd(double* restrict input, emd_workspace* restrict w, double* restrict output,
+static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w,
+		double* restrict output, size_t M,
 		unsigned int S_number, unsigned int num_siftings);
 
 // Forward declaration of a helper function for applying the sifting procedure to
 // input until it is reduced to an IMF according to the stopping criteria given
 // by S_number and num_siftings
-static inline void _sift(double* restrict input, sifting_workspace* restrict w, unsigned int S_number, unsigned int num_siftings);
+static inline libeemd_error_code _sift(double* restrict input, sifting_workspace* restrict w, unsigned int S_number, unsigned int num_siftings);
+
+// Forward declaration of a helper function for parameter validation shared by functions eemd and ceemdan
+static inline libeemd_error_code _validate_eemd_parameters(unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings);
 
 // Main EEMD decomposition routine definition
-void eemd(double const* restrict input, size_t N, double* restrict output,
+libeemd_error_code eemd(double const* restrict input, size_t N,
+		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed) {
-	assert(ensemble_size >= 1);
-	assert(noise_strength >= 0);
-	assert(ensemble_size == 1 || noise_strength > 0);
-	assert(ensemble_size > 1 || noise_strength == 0);
-	assert(S_number > 0 || num_siftings > 0);
+	// Validate parameters
+	libeemd_error_code validation_result = _validate_eemd_parameters(ensemble_size, noise_strength, S_number, num_siftings);
+	if (validation_result != EMD_SUCCESS) {
+		return validation_result;
+	}
 	// For empty data we have nothing to do
 	if (N == 0) {
-		return;
+		return EMD_SUCCESS;
 	}
-	const size_t M = emd_num_imfs(N);
+	if (M == 0) {
+		M = emd_num_imfs(N);
+	}
 	// The noise standard deviation is noise_strength times the standard deviation of input data
 	const double noise_sigma = (noise_strength != 0)? gsl_stats_sd(input, 1, N)*noise_strength : 0;
 	// Initialize output data to zero
@@ -259,7 +266,7 @@ void eemd(double const* restrict input, size_t N, double* restrict output,
 				}
 			}
 			// Extract IMFs with EMD
-			_emd(w->x, w->emd_w, output, S_number, num_siftings);
+			_emd(w->x, w->emd_w, output, M, S_number, num_siftings);
 			#pragma omp atomic
 			ensemble_counter++;
 			#if EEMD_DEBUG >= 1
@@ -283,22 +290,31 @@ void eemd(double const* restrict input, size_t N, double* restrict output,
 		const double one_per_ensemble_size = 1.0/ensemble_size;
 		array_mult(output, N*M, one_per_ensemble_size);
 	}
+	return EMD_SUCCESS;
 }
 
 // Main CEEMDAN decomposition routine definition
-void ceemdan(double const* restrict input, size_t N, double* restrict output,
+libeemd_error_code ceemdan(double const* restrict input, size_t N,
+		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed) {
-	assert(ensemble_size >= 1);
-	assert(noise_strength >= 0);
-	assert(ensemble_size == 1 || noise_strength > 0);
-	assert(ensemble_size > 1 || noise_strength == 0);
-	assert(S_number > 0 || num_siftings > 0);
+	// Validate parameters
+	libeemd_error_code validation_result = _validate_eemd_parameters(ensemble_size, noise_strength, S_number, num_siftings);
+	if (validation_result != EMD_SUCCESS) {
+		return validation_result;
+	}
 	// For empty data we have nothing to do
 	if (N == 0) {
-		return;
+		return EMD_SUCCESS;
 	}
-	const size_t M = emd_num_imfs(N);
+	// For M == 1 the only "IMF" is the residual
+	if (M == 1) {
+		memcpy(output, input, N*sizeof(double));
+		return EMD_SUCCESS;
+	}
+	if (M == 0) {
+		M = emd_num_imfs(N);
+	}
 	const double one_per_ensemble_size = 1.0/ensemble_size;
 	// The noise standard deviation is noise_strength times the standard deviation of input data
 	const double noise_sigma = (noise_strength != 0)? gsl_stats_sd(input, 1, N)*noise_strength : 0;
@@ -362,12 +378,18 @@ void ceemdan(double const* restrict input, size_t N, double* restrict output,
 		// Provide a pointer to the output vector where this IMF will be stored
 		double* const imf = &output[imf_i*N];
 		// Then we go parallel to compute the different ensemble members
+		libeemd_error_code sift_err = EMD_SUCCESS;
 		#pragma omp parallel
 		{
 			const int thread_id = omp_get_thread_num();
 			eemd_workspace* w = ws[thread_id];
 			#pragma omp for
 			for (size_t en_i=0; en_i<ensemble_size; en_i++) {
+				// Check if an error has occured in other threads
+				#pragma omp flush(sift_err)
+				if (sift_err != EMD_SUCCESS) {
+					continue;
+				}
 				// Provide a pointer to the noise vector and noise residual used by
 				// this ensemble member
 				double* const noise = &noises[N*en_i];
@@ -375,7 +397,8 @@ void ceemdan(double const* restrict input, size_t N, double* restrict output,
 				// Initialize input signal as data + noise
 				array_add_to(res, noise, N, w->x);
 				// Sift to extract first EMD mode
-				_sift(w->x, w->emd_w->sift_w, S_number, num_siftings);
+				sift_err = _sift(w->x, w->emd_w->sift_w, S_number, num_siftings);
+				#pragma omp flush(sift_err)
 				// Sum to output vector
 				get_lock(output_lock);
 				array_add(w->x, N, imf);
@@ -388,10 +411,14 @@ void ceemdan(double const* restrict input, size_t N, double* restrict output,
 				else {
 					array_copy(noise_residual, N, noise);
 				}
-				_sift(noise, w->emd_w->sift_w, S_number, num_siftings);
+				sift_err = _sift(noise, w->emd_w->sift_w, S_number, num_siftings);
+				#pragma omp flush(sift_err)
 				array_sub(noise, N, noise_residual);
 			}
 		} // Parallel section ends
+		if (sift_err != EMD_SUCCESS) {
+			return sift_err;
+		}
 		// Divide with ensemble size to get the average
 		array_mult(imf, N, one_per_ensemble_size);
 		// Subtract this IMF from the previous residual to form the new one
@@ -411,13 +438,32 @@ void ceemdan(double const* restrict input, size_t N, double* restrict output,
 	free(noises); noises = NULL;
 	destroy_lock(output_lock);
 	free(output_lock); output_lock = NULL;
+	return EMD_SUCCESS;
 }
 
+static inline libeemd_error_code _validate_eemd_parameters(unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings) {
+	if (ensemble_size < 1) {
+		return EMD_INVALID_ENSEMBLE_SIZE;
+	}
+	if (noise_strength < 0) {
+		return EMD_INVALID_NOISE_STRENGTH;
+	}
+	if (ensemble_size == 1 && noise_strength > 0) {
+		return EMD_NOISE_ADDED_TO_EMD;
+	}
+	if (ensemble_size > 1 && noise_strength == 0) {
+		return EMD_NO_NOISE_ADDED_TO_EEMD;
+	}
+	if (S_number == 0 && num_siftings == 0) {
+		return EMD_NO_CONVERGENCE_POSSIBLE;
+	}
+	return EMD_SUCCESS;
+}
 
 // Helper function for applying the sifting procedure to input until it is
 // reduced to an IMF according to the stopping criteria given by S_number and
 // num_siftings
-static inline void _sift(double* restrict input, sifting_workspace* restrict w, unsigned int S_number, unsigned int num_siftings) {
+static inline libeemd_error_code _sift(double* restrict input, sifting_workspace* restrict w, unsigned int S_number, unsigned int num_siftings) {
 	const size_t N = w->N;
 	// Provide some shorthands to avoid excessive '->' operators
 	double* const maxx = w->maxx;
@@ -453,26 +499,35 @@ static inline void _sift(double* restrict input, sifting_workspace* restrict w, 
 			}
 		}
 		// Fit splines, choose order of spline based on the number of extrema
-		emd_evaluate_spline(maxx, maxy, num_max, w->maxspline, w->spline_workspace);
-		emd_evaluate_spline(minx, miny, num_min, w->minspline, w->spline_workspace);
+		libeemd_error_code max_errcode = emd_evaluate_spline(maxx, maxy, num_max, w->maxspline, w->spline_workspace);
+		if (max_errcode != EMD_SUCCESS) {
+			return max_errcode;
+		}
+		libeemd_error_code min_errcode = emd_evaluate_spline(minx, miny, num_min, w->minspline, w->spline_workspace);
+		if (min_errcode != EMD_SUCCESS) {
+			return min_errcode;
+		}
 		// Subtract envelope mean from the data
 		for (size_t i=0; i<N; i++) {
 			input[i] -= 0.5*(w->maxspline[i] + w->minspline[i]);
 		}
 	}
+	return EMD_SUCCESS;
 }
 
 // Helper function for extracting all IMFs from input using the sifting
 // procedure defined by _sift. The contents of the input array are destroyed in
 // the process.
-static void _emd(double* restrict input, emd_workspace* restrict w, double* restrict output,
+static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w,
+		double* restrict output, size_t M,
 		unsigned int S_number, unsigned int num_siftings) {
 	// Provide some shorthands to avoid excessive '->' operators
 	const size_t N = w->N;
 	double* const res = w->res;
 	lock** locks = w->locks;
-	// Compute how many IMFs will be separated
-	const size_t M = emd_num_imfs(N);
+	if (M == 0) {
+		M = emd_num_imfs(N);
+	}
 	// We need to store a copy of the original signal so that once it is
 	// reduced to an IMF we have something to subtract the IMF from to form
 	// the residual for the next iteration
@@ -485,7 +540,10 @@ static void _emd(double* restrict input, emd_workspace* restrict w, double* rest
 			array_copy(res, N, input);
 		}
 		// Perform siftings on input until it is an IMF
-		_sift(input, w->sift_w, S_number, num_siftings);
+		libeemd_error_code sift_err = _sift(input, w->sift_w, S_number, num_siftings);
+		if (sift_err != EMD_SUCCESS) {
+			return sift_err;
+		}
 		// Subtract this IMF from the saved copy to form the residual for
 		// the next round
 		array_sub(input, N, res);
@@ -503,6 +561,7 @@ static void _emd(double* restrict input, emd_workspace* restrict w, double* rest
 	get_lock(locks[M-1]);
 	array_add(res, N, output+N*(M-1));
 	release_lock(locks[M-1]);
+	return EMD_SUCCESS;
 }
 
 bool emd_find_extrema(double const* restrict x, size_t N,
@@ -610,16 +669,25 @@ size_t emd_num_imfs(size_t N) {
 	return (size_t)(log2(N));
 }
 
-void emd_evaluate_spline(double const* restrict x, double const* restrict y,
+libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* restrict y,
 		size_t N, double* restrict spline_y, double* restrict spline_workspace) {
 	const size_t n = N-1;
 	const size_t max_j = (size_t)x[n];
-	// perform some simple assertions
-	assert(N >= 2);
-	assert(x[0] == 0);
-	for (size_t i=1; i<N; i++) {
-		assert(x[i] > x[i-1]);
+	if (N <= 1) {
+		return EMD_NOT_ENOUGH_POINTS_FOR_SPLINE;
 	}
+	// perform more assertions only if EEMD_DEBUG is on,
+	// as this function is meant only for internal use
+	#if EEMD_DEBUG >= 1
+	if (x[0] != 0) {
+		return EMD_INVALID_SPLINE_POINTS;
+	}
+	for (size_t i=1; i<N; i++) {
+		if (x[i] <= x[i-1]) {
+			return EMD_INVALID_SPLINE_POINTS;
+		}
+	}
+	#endif
 	// Fall back to linear interpolation (for N==2) or polynomial interpolation
 	// (for N==3)
 	if (N <= 3) {
@@ -627,7 +695,7 @@ void emd_evaluate_spline(double const* restrict x, double const* restrict y,
 		for (size_t j=0; j<=max_j; j++) {
 			spline_y[j] = gsl_poly_dd_eval(spline_workspace, x, N, j);
 		}
-		return;
+		return EMD_SUCCESS;
 	}
 	// For N >= 4, interpolate by using cubic splines with not-a-node end conditions.
 	// This algorithm is described in "Numerical Algorithms with C" by
@@ -682,7 +750,7 @@ void emd_evaluate_spline(double const* restrict x, double const* restrict y,
 	if (status) {
 		fprintf(stderr, "Error reported by gsl_linalg_solve_tridiag: %s\n",
 				gsl_strerror(status));
-		return;
+		return EMD_GSL_ERROR;
 	}
 	// Compute c[0] and c[n]
 	c[0] = c[1] + (h_0/h_1)*(c[1]-c[2]);
@@ -711,4 +779,45 @@ void emd_evaluate_spline(double const* restrict x, double const* restrict y,
 		// evaluate spline at x=j using the Horner scheme
 		spline_y[j] = a_i + dx*(b_i + dx*(c_i + dx*d_i));
 	}
+	return EMD_SUCCESS;
+}
+
+// Helper functions for printing what error codes mean
+void emd_report_to_file_if_error(FILE* file, libeemd_error_code err) {
+	if (err == EMD_SUCCESS) {
+		return;
+	}
+	fprintf(file, "libeemd error: ");
+	switch (err) {
+		case EMD_INVALID_ENSEMBLE_SIZE :
+			fprintf(file, "Invalid ensemble size (zero or negative)\n");
+			break;
+		case EMD_INVALID_NOISE_STRENGTH :
+			fprintf(file, "Invalid noise strength (negative)\n");
+			break;
+		case EMD_NOISE_ADDED_TO_EMD :
+			fprintf(file, "Positive noise strength but ensemble size is one (regular EMD)\n");
+			break;
+		case EMD_NO_NOISE_ADDED_TO_EEMD :
+			fprintf(file, "Ensemble size is more than one (EEMD) but noise strength is zero\n");
+			break;
+		case EMD_NO_CONVERGENCE_POSSIBLE :
+			fprintf(file, "Stopping criteria invalid: would never converge\n");
+			break;
+		case EMD_NOT_ENOUGH_POINTS_FOR_SPLINE :
+			fprintf(file, "Spline evaluation tried with insufficient points\n");
+			break;
+		case EMD_INVALID_SPLINE_POINTS :
+			fprintf(file, "Spline evaluation points invalid\n");
+			break;
+		case EMD_GSL_ERROR :
+			fprintf(file, "Error reported by GSL library\n");
+			break;
+		default :
+			fprintf(file, "Error code with unknown meaning. Please file a bug!\n");
+	}
+}
+
+void emd_report_if_error(libeemd_error_code err) {
+	emd_report_to_file_if_error(stderr, err);
 }

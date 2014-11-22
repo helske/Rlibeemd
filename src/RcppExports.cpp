@@ -6,19 +6,20 @@
 using namespace Rcpp;
 
 // ceemdanR
-NumericMatrix ceemdanR(NumericVector input, unsigned int ensemble_size = 250, double noise_strength = 0.2, unsigned int S_number = 4, unsigned int num_siftings = 0, unsigned long int rng_seed = 0);
-RcppExport SEXP libeemd_ceemdanR(SEXP inputSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP) {
+NumericMatrix ceemdanR(NumericVector input, double num_imfs = 0, unsigned int ensemble_size = 250, double noise_strength = 0.2, unsigned int S_number = 4, unsigned int num_siftings = 50, unsigned long int rng_seed = 0);
+RcppExport SEXP Rlibeemd_ceemdanR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP );
+        Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP );
         Rcpp::traits::input_parameter< unsigned int >::type ensemble_size(ensemble_sizeSEXP );
         Rcpp::traits::input_parameter< double >::type noise_strength(noise_strengthSEXP );
         Rcpp::traits::input_parameter< unsigned int >::type S_number(S_numberSEXP );
         Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP );
         Rcpp::traits::input_parameter< unsigned long int >::type rng_seed(rng_seedSEXP );
-        NumericMatrix __result = ceemdanR(input, ensemble_size, noise_strength, S_number, num_siftings, rng_seed);
+        NumericMatrix __result = ceemdanR(input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -26,19 +27,35 @@ BEGIN_RCPP
 END_RCPP
 }
 // eemdR
-NumericMatrix eemdR(NumericVector input, unsigned int ensemble_size = 250, double noise_strength = 0.2, unsigned int S_number = 4, unsigned int num_siftings = 0, unsigned long int rng_seed = 0);
-RcppExport SEXP libeemd_eemdR(SEXP inputSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP) {
+NumericMatrix eemdR(NumericVector input, double num_imfs = 0, unsigned int ensemble_size = 250, double noise_strength = 0.2, unsigned int S_number = 4, unsigned int num_siftings = 50, unsigned long int rng_seed = 0);
+RcppExport SEXP Rlibeemd_eemdR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP );
+        Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP );
         Rcpp::traits::input_parameter< unsigned int >::type ensemble_size(ensemble_sizeSEXP );
         Rcpp::traits::input_parameter< double >::type noise_strength(noise_strengthSEXP );
         Rcpp::traits::input_parameter< unsigned int >::type S_number(S_numberSEXP );
         Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP );
         Rcpp::traits::input_parameter< unsigned long int >::type rng_seed(rng_seedSEXP );
-        NumericMatrix __result = eemdR(input, ensemble_size, noise_strength, S_number, num_siftings, rng_seed);
+        NumericMatrix __result = eemdR(input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// emd_num_imfsR
+int emd_num_imfsR(double N);
+RcppExport SEXP Rlibeemd_emd_num_imfsR(SEXP NSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< double >::type N(NSEXP );
+        int __result = emd_num_imfsR(N);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -47,7 +64,7 @@ END_RCPP
 }
 // extrema
 List extrema(NumericVector x);
-RcppExport SEXP libeemd_extrema(SEXP xSEXP) {
+RcppExport SEXP Rlibeemd_extrema(SEXP xSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -62,7 +79,7 @@ END_RCPP
 }
 // cspline
 NumericVector cspline(NumericVector x, NumericVector y);
-RcppExport SEXP libeemd_cspline(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP Rlibeemd_cspline(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {

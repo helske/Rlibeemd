@@ -1,0 +1,6 @@
+Underlying C library of libeemd needs GNU Scientific Library (GSL) in order to work. 
+Compiling GSL for Windows can be difficult, so easiest way to proceed as follows.
+
+1. Download local300.zip from http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/
+2. Extract all the files somewhere, for example C:/GSL
+3. Add environment variable LIB_GSL which points to the above defined directory

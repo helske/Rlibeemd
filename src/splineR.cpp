@@ -6,7 +6,7 @@ extern "C"
 {
   #include "eemd.h"
 }
-
+#include "extras.h"
 using namespace Rcpp;
 
 //' Cubic Spline Interpolation
@@ -26,6 +26,8 @@ NumericVector cspline(NumericVector x, NumericVector y){
   size_t N = x.size();
   NumericVector spline(x.size());
   NumericVector spline_workspace(5*N-10);
-  emd_evaluate_spline(x.begin(), y.begin(), N, spline.begin(), spline_workspace.begin());
+  libeemd_error_code err = emd_evaluate_spline(x.begin(), y.begin(), N, spline.begin(), spline_workspace.begin());
+  if(err!=EMD_SUCCESS)
+  printError(err);
   return spline;
 }
