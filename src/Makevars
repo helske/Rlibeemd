@@ -1,4 +1,0 @@
-## This assumes that the LIB_GSL variable points to working GSL libraries
-PKG_CPPFLAGS=-I$(LIB_GSL)/include -I../inst/include
-PKG_LIBS=-L$(LIB_GSL)/lib/x64 -lgsl -lgslcblas $(SHLIB_OPENMP_CFLAGS)
-PKG_CFLAGS=$(SHLIB_OPENMP_CFLAGS)
