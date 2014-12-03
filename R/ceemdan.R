@@ -25,7 +25,18 @@
 #'       (1999) 417--457}
 #'       }
 #' @seealso \code{\link{eemd}} 
-ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L) {
+#' @examples
+#' imfs <- ceemdan(UKgas)
+#' # trend extraction
+#' ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2, main = "Quarterly UK gas consumption", ylab = "Million therms")
+#' 
+#' # CEEMDAN for logarithmic demand, note that increasing ensemble size 
+#' # from default will produce smoother results
+#' imfs <- ceemdan(log(UKgas))
+#' plot(ts.union(Seasonal = imfs[,1], Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]), 
+#'      main = "Quarterly UK gas consumption")
+ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, 
+                    num_siftings = 50L, rng_seed = 0L) {
   output<-.Call('Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 
              noise_strength, S_number, num_siftings, rng_seed)
   if(inherits(input,"ts")){

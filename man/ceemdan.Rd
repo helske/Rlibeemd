@@ -47,6 +47,17 @@ stopping criterion for the decomposition is given by either a S-number [2] or
 an absolute number of siftings. In the case that both are positive numbers,
 the sifting ends when either of the conditions is fulfilled.
 }
+\examples{
+imfs <- ceemdan(UKgas)
+# trend extraction
+ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2, main = "Quarterly UK gas consumption", ylab = "Million therms")
+
+# CEEMDAN for logarithmic demand, note that increasing ensemble size
+# from default will produce smoother results
+imfs <- ceemdan(log(UKgas))
+plot(ts.union(Seasonal = imfs[,1], Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]),
+     main = "Quarterly UK gas consumption")
+}
 \references{
 \enumerate{
  \item{M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
