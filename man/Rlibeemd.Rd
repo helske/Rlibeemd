@@ -13,9 +13,9 @@ Package is based on the libeemd C library.
 }
 \references{
 \itemize{
- \item{P. Luukko, J. Helske and E. Rasanen,
-"Introducing libeemd: a C library and a Python module for performing the
-ensemble empirical mode decomposition", Submitted.}
+ \item{P. Luukko, J. Helske and E. Räsänen,
+"Introducing libeemd: a C library, a Python module, and an R package for performing the ensemble
+empirical mode decomposition", Submitted.}
 \item{ Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A
       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
       Vol. 1 (2009) 1--41.}

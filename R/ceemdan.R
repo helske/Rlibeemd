@@ -15,13 +15,15 @@
 #' @inheritParams eemd
 #' @return Time series object of class \code{"mts"} where series corresponds to
 #'        IMFs of the input signal, with the last series being the final residual.
-#' @references 
-#'  [1] M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
+#' @references
+#' \enumerate{ 
+#'  \item{M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
 #'   IEEE Int. Conf. on Acoust., Speech and Signal Proc. ICASSP-11,
-#'   (2011) 4144-4147 \cr
-#'  [2] N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
+#'   (2011) 4144--4147}
+#'  \item{N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
 #'       waves: The Hilbert spectrum", Annual Review of Fluid Mechanics, Vol. 31
-#'       (1999) 417-457
+#'       (1999) 417--457}
+#'       }
 #' @seealso \code{\link{eemd}} 
 ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L) {
   output<-.Call('Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 

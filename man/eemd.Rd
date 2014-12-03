@@ -19,7 +19,7 @@ respect, so you most likely want at least num_imfs=2.}
 \item{noise_strength}{Standard deviation of the Gaussian random numbers used as additional
 noise. \bold{This value is relative} to the standard deviation of the input signal.}
 
-\item{S_number}{Integer. Use the S-number stopping criterion [2] for the EMD procedure with the given values of $S$.
+\item{S_number}{Integer. Use the S-number stopping criterion for the EMD procedure with the given values of $S$.
 That is, iterate until the number of extrema and zero crossings in the
 signal differ at most by one, and stay the same for S consecutive
 iterations. Typical values are in the range 3--8. If \code{S_number} is
@@ -46,13 +46,31 @@ stopping criterion for the decomposition is given by either a S-number [2] or
 an absolute number of siftings. In the case that both are positive numbers,
 the sifting ends when either of the conditions is fulfilled.
 }
+\examples{
+x <- seq(0, 2*pi, length.out=500)
+signal <- sin(4*x)
+intermittent <- 0.1*sin(80*x)
+y <- signal * (1 + ifelse(signal > 0.7, intermittent,0))
+
+plot(x=x,y=y,type="l")
+# Decompose with EEMD
+imfs <- eemd(y, num_siftings=10)
+
+plot(imfs)
+# High frequencies
+ts.plot(rowSums(imfs[,1:3]))
+# Low frequencies
+ts.plot(rowSums(imfs[,4:ncol(imfs)]))
+}
 \references{
-[1] Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A
+\enumerate{
+      \item{Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A
       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
-      Vol. 1 (2009) 1-41 \cr
-      [2] N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
+      Vol. 1 (2009) 1--41}
+      \item{N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
       waves: The Hilbert spectrum", Annual Review of Fluid Mechanics, Vol. 31
-      (1999) 417-457
+      (1999) 417--457}
+      }
 }
 \seealso{
 \code{\link{ceemdan}}

@@ -22,9 +22,11 @@
 #' @return Time series object of class \code{"mts"} where series corresponds to
 #'        IMFs of the input signal, with the last series being the final residual.
 #'  @references
-#'  [1] N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
+#' \enumerate{
+#'       \item{N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
 #'       waves: The Hilbert spectrum", Annual Review of Fluid Mechanics, Vol. 31
-#'       (1999) 417-457
+#'       (1999) 417--457}
+#'       }
 #' @seealso \code{\link{eemd}}, \code{\link{ceemdan}} 
 emd <- function(input, num_imfs = 0, S_number = 4L, num_siftings = 50L) {
   output<-.Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size=1, 

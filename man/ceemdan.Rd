@@ -19,7 +19,7 @@ respect, so you most likely want at least num_imfs=2.}
 \item{noise_strength}{Standard deviation of the Gaussian random numbers used as additional
 noise. \bold{This value is relative} to the standard deviation of the input signal.}
 
-\item{S_number}{Integer. Use the S-number stopping criterion [2] for the EMD procedure with the given values of $S$.
+\item{S_number}{Integer. Use the S-number stopping criterion for the EMD procedure with the given values of $S$.
 That is, iterate until the number of extrema and zero crossings in the
 signal differ at most by one, and stay the same for S consecutive
 iterations. Typical values are in the range 3--8. If \code{S_number} is
@@ -48,12 +48,14 @@ an absolute number of siftings. In the case that both are positive numbers,
 the sifting ends when either of the conditions is fulfilled.
 }
 \references{
-[1] M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
+\enumerate{
+ \item{M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
   IEEE Int. Conf. on Acoust., Speech and Signal Proc. ICASSP-11,
-  (2011) 4144-4147 \cr
- [2] N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
+  (2011) 4144--4147}
+ \item{N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
       waves: The Hilbert spectrum", Annual Review of Fluid Mechanics, Vol. 31
-      (1999) 417-457
+      (1999) 417--457}
+      }
 }
 \seealso{
 \code{\link{eemd}}

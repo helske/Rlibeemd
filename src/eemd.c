@@ -188,7 +188,9 @@ static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w
 // Forward declaration of a helper function for applying the sifting procedure to
 // input until it is reduced to an IMF according to the stopping criteria given
 // by S_number and num_siftings
-static inline libeemd_error_code _sift(double* restrict input, sifting_workspace* restrict w, unsigned int S_number, unsigned int num_siftings);
+static libeemd_error_code _sift(double* restrict input, sifting_workspace*
+		restrict w, unsigned int S_number, unsigned int num_siftings, unsigned int*
+		sift_counter);
 
 // Forward declaration of a helper function for parameter validation shared by functions eemd and ceemdan
 static inline libeemd_error_code _validate_eemd_parameters(unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings);
@@ -226,6 +228,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 	#endif
 	unsigned int ensemble_counter = 0;
 	// The following section is executed in parallel
+	libeemd_error_code emd_err = EMD_SUCCESS;
 	#pragma omp parallel
 	{
 		#ifdef _OPENMP
@@ -256,6 +259,11 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 		// Loop over all ensemble members, dividing them among the threads
 		#pragma omp for
 		for (size_t en_i=0; en_i<ensemble_size; en_i++) {
+			// Check if an error has occured in other threads
+			#pragma omp flush(emd_err)
+			if (emd_err != EMD_SUCCESS) {
+				continue;
+			}
 			// Initialize ensemble member as input data + noise
 			if (noise_strength == 0.0) {
 				array_copy(input, N, w->x);
@@ -266,7 +274,8 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 				}
 			}
 			// Extract IMFs with EMD
-			_emd(w->x, w->emd_w, output, M, S_number, num_siftings);
+			emd_err = _emd(w->x, w->emd_w, output, M, S_number, num_siftings);
+			#pragma omp flush(emd_err)
 			#pragma omp atomic
 			ensemble_counter++;
 			#if EEMD_DEBUG >= 1
@@ -285,6 +294,9 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 			free(locks); locks = NULL;
 		}
 	} // End of parallel block
+	if (emd_err != EMD_SUCCESS) {
+		return emd_err;
+	}
 	// Divide output data by the ensemble size to get the average
 	if (ensemble_size != 1) {
 		const double one_per_ensemble_size = 1.0/ensemble_size;
@@ -381,8 +393,13 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		libeemd_error_code sift_err = EMD_SUCCESS;
 		#pragma omp parallel
 		{
+			#ifdef _OPENMP
 			const int thread_id = omp_get_thread_num();
+			#else
+			const int thread_id = 0;
+			#endif
 			eemd_workspace* w = ws[thread_id];
+			unsigned int sift_counter = 0;
 			#pragma omp for
 			for (size_t en_i=0; en_i<ensemble_size; en_i++) {
 				// Check if an error has occured in other threads
@@ -397,7 +414,7 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 				// Initialize input signal as data + noise
 				array_add_to(res, noise, N, w->x);
 				// Sift to extract first EMD mode
-				sift_err = _sift(w->x, w->emd_w->sift_w, S_number, num_siftings);
+				sift_err = _sift(w->x, w->emd_w->sift_w, S_number, num_siftings, &sift_counter);
 				#pragma omp flush(sift_err)
 				// Sum to output vector
 				get_lock(output_lock);
@@ -411,7 +428,7 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 				else {
 					array_copy(noise_residual, N, noise);
 				}
-				sift_err = _sift(noise, w->emd_w->sift_w, S_number, num_siftings);
+				sift_err = _sift(noise, w->emd_w->sift_w, S_number, num_siftings, &sift_counter);
 				#pragma omp flush(sift_err)
 				array_sub(noise, N, noise_residual);
 			}
@@ -462,8 +479,10 @@ static inline libeemd_error_code _validate_eemd_parameters(unsigned int ensemble
 
 // Helper function for applying the sifting procedure to input until it is
 // reduced to an IMF according to the stopping criteria given by S_number and
-// num_siftings
-static inline libeemd_error_code _sift(double* restrict input, sifting_workspace* restrict w, unsigned int S_number, unsigned int num_siftings) {
+// num_siftings. The required number of siftings is saved to sift_counter.
+static libeemd_error_code _sift(double* restrict input, sifting_workspace*
+		restrict w, unsigned int S_number, unsigned int num_siftings,
+		unsigned int* sift_counter) {
 	const size_t N = w->N;
 	// Provide some shorthands to avoid excessive '->' operators
 	double* const maxx = w->maxx;
@@ -472,26 +491,43 @@ static inline libeemd_error_code _sift(double* restrict input, sifting_workspace
 	double* const miny = w->miny;
 	// Initialize counters that keep track of the number of siftings
 	// and the S number
-	unsigned int sift_counter = 0;
+	*sift_counter = 0;
 	unsigned int S_counter = 0;
-	// Numbers of minima and maxima are initialized to dummy values
+	// Numbers of extrema and zero crossings are initialized to dummy values
 	size_t num_max = (size_t)(-1);
 	size_t num_min = (size_t)(-1);
+	size_t num_zc = (size_t)(-1);
 	size_t prev_num_max = (size_t)(-1);
 	size_t prev_num_min = (size_t)(-1);
-	while (num_siftings == 0 || sift_counter < num_siftings) {
-		sift_counter++;
+	size_t prev_num_zc = (size_t)(-1);
+	while (num_siftings == 0 || *sift_counter < num_siftings) {
+		(*sift_counter)++;
+		#if EEMD_DEBUG >= 1
+		if (*sift_counter == 10000) {
+			fprintf(stderr, "Something is probably wrong. Sift counter has reached 10000.\n");
+		}
+		#endif
 		prev_num_max = num_max;
 		prev_num_min = num_min;
-		// Find extrema
-		const bool all_extrema_good = emd_find_extrema(input, N,
-				maxx, maxy, &num_max, minx, miny, &num_min);
+		prev_num_zc = num_zc;
+		// Find extrema and count zero crossings
+		emd_find_extrema(input, N, maxx, maxy, &num_max, minx, miny, &num_min, &num_zc);
 		// Check if we are finished based on the S-number criteria
 		if (S_number != 0) {
-			if (all_extrema_good && (num_max == prev_num_max) && (num_min == prev_num_min)) {
+			const int max_diff = (int)num_max - (int)prev_num_max;
+			const int min_diff = (int)num_min - (int)prev_num_min;
+			const int zc_diff = (int)num_zc - (int)prev_num_zc;
+			if (abs(max_diff)+abs(min_diff)+abs(zc_diff) <= 1) {
 				S_counter++;
-				if (S_counter > S_number) {
-					break;
+				if (S_counter >= S_number) {
+					const int num_diff = (int)num_min + (int)num_max - 4 - (int)num_zc;
+					if (abs(num_diff) <= 1) {
+						// Number of extrema has been stable for S_number steps
+						// and the number of *interior* extrema and zero
+						// crossings differ by at most one -- we are converged
+						// according to the S-number criterion
+						break;
+					}
 				}
 			}
 			else {
@@ -533,6 +569,7 @@ static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w
 	// the residual for the next iteration
 	array_copy(input, N, res);
 	// Loop over all IMFs to be separated from input
+	unsigned int sift_counter;
 	for (size_t imf_i=0; imf_i<M-1; imf_i++) {
 		if (imf_i != 0) {
 			// Except for the first iteration, restore the previous residual
@@ -540,7 +577,7 @@ static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w
 			array_copy(res, N, input);
 		}
 		// Perform siftings on input until it is an IMF
-		libeemd_error_code sift_err = _sift(input, w->sift_w, S_number, num_siftings);
+		libeemd_error_code sift_err = _sift(input, w->sift_w, S_number, num_siftings, &sift_counter);
 		if (sift_err != EMD_SUCCESS) {
 			return sift_err;
 		}
@@ -564,34 +601,39 @@ static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w
 	return EMD_SUCCESS;
 }
 
-bool emd_find_extrema(double const* restrict x, size_t N,
+void emd_find_extrema(double const* restrict x, size_t N,
 		double* restrict maxx, double* restrict maxy, size_t* nmax,
-		double* restrict minx, double* restrict miny, size_t* nmin) {
+		double* restrict minx, double* restrict miny, size_t* nmin,
+		size_t* nzc) {
+	// Set the number of extrema and zero crossings to zero initially
+	*nmax = 0;
+	*nmin = 0;
+	*nzc = 0;
 	// Handle empty array as a special case
 	if (N == 0) {
-		*nmax = 0;
-		*nmin = 0;
-		return true;
+		return;
 	}
-	// Add the ends of the data as both local minima and extrema. These
+	// Add the ends of the data as both local minima and maxima. These
 	// might be changed later by linear extrapolation.
 	maxx[0] = 0;
 	maxy[0] = x[0];
-	*nmax = 1;
+	(*nmax)++;
 	minx[0] = 0;
 	miny[0] = x[0];
-	*nmin = 1;
+	(*nmin)++;
 	// If we had only one data point this is it
 	if (N == 1) {
-		return true;
+		return;
 	}
 	// Now starts the main extrema-finding loop. The loop detects points where
 	// the slope of the data changes sign. In the case of flat regions at the
 	// extrema, the center point of the flat region will be considered the
-	// extremal point.
-	bool all_extrema_good = true;
+	// extremal point. While detecting extrema, the loop also counts the number
+	// of zero crossings that occur.
 	enum slope { UP, DOWN, NONE };
+	enum sign { POS, NEG, ZERO };
 	enum slope previous_slope = NONE;
+	enum sign previous_sign = (x[0] < -0)? NEG : ((x[0] > 0)? POS : ZERO);
 	int flat_counter = 0;
 	for (size_t i=0; i<N-1; i++) {
 		if (x[i+1] > x[i]) { // Going up
@@ -600,9 +642,14 @@ bool emd_find_extrema(double const* restrict x, size_t N,
 				minx[*nmin] = (double)(i)-(double)(flat_counter)/2;
 				miny[*nmin] = x[i];
 				(*nmin)++;
-				if (x[i] >= 0) {
-					all_extrema_good = false;
-				}
+			}
+			if (previous_sign == NEG && x[i+1] > 0) { // zero crossing from neg to pos
+				(*nzc)++;
+				previous_sign = POS;
+			}
+			else if (previous_sign == ZERO && x[i+1] > 0) {
+				// this needs to be handled as an unfortunate special case
+				previous_sign = POS;
 			}
 			previous_slope = UP;
 			flat_counter = 0;
@@ -613,9 +660,14 @@ bool emd_find_extrema(double const* restrict x, size_t N,
 				maxx[*nmax] = (double)(i)-(double)(flat_counter)/2;
 				maxy[*nmax] = x[i];
 				(*nmax)++;
-				if (x[i] <= 0) {
-					all_extrema_good = false;
-				}
+			}
+			if (previous_sign == POS && x[i+1] < -0) { // zero crossing from pos to neg
+				(*nzc)++;
+				previous_sign = NEG;
+			}
+			else if (previous_sign == ZERO && x[i+1] < -0) {
+				// this needs to be handled as an unfortunate special case
+				previous_sign = NEG;
 			}
 			previous_slope = DOWN;
 			flat_counter = 0;
@@ -656,7 +708,7 @@ bool emd_find_extrema(double const* restrict x, size_t N,
 		if (min_er < miny[*nmin-1])
 			miny[*nmin-1] = min_er;
 	}
-	return all_extrema_good;
+	return;
 }
 
 size_t emd_num_imfs(size_t N) {

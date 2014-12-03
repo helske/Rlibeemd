@@ -34,9 +34,11 @@ Empirical Mode Decomposition algorithm.
 This is a wrapper around \code{eemd} with \code{ensemble_size = 1} and \code{noise_strength = 0}.
 }
 \references{
-[1] N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
+\enumerate{
+      \item{N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water
       waves: The Hilbert spectrum", Annual Review of Fluid Mechanics, Vol. 31
-      (1999) 417-457
+      (1999) 417--457}
+      }
 }
 \seealso{
 \code{\link{eemd}}, \code{\link{ceemdan}}

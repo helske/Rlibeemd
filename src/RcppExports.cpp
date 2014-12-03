@@ -77,19 +77,3 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// cspline
-NumericVector cspline(NumericVector x, NumericVector y);
-RcppExport SEXP Rlibeemd_cspline(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP );
-        NumericVector __result = cspline(x, y);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}

@@ -2,8 +2,8 @@ Package: Rlibeemd
 Type: Package
 Title: Rlibeemd: Ensemble empirical mode decomposition (EEMD) and its complete
     variant (CEEMDAN)
-Version: 1.1.1
-Date: 2014-11-24
+Version: 1.2.0
+Date: 2014-12-03
 Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
     comment = "R interface",email = "jouni.helske@jyu.fi"), person(given =
     "Perttu", family = "Luukko", role = "aut", comment = "Original libeemd C
@@ -17,3 +17,4 @@ SystemRequirements: GNU GSL
 Imports:
     Rcpp (>= 0.11.0)
 LinkingTo: Rcpp
+Encoding: UTF-8

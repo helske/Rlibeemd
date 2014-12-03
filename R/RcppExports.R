@@ -22,36 +22,7 @@ emd_num_imfs <- function(N) {
     .Call('Rlibeemd_emd_num_imfsR', PACKAGE = 'Rlibeemd', N)
 }
 
-#' Find the local extrema of the input data
-#' 
-#' Find the local minima and maxima from input data \code{x}. This includes the
-#' artificial extrema added to the ends of the data as specified in the
-#' original EEMD article.
-#' @export
-#' @name extrema
-#' @param x Vector of length x.
-#' @return a list with components ...
-#'
-#' @references Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A
-#'       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
-#'       Vol. 1 (2009) 1-41
 extrema <- function(x) {
     .Call('Rlibeemd_extrema', PACKAGE = 'Rlibeemd', x)
-}
-
-#' Cubic Spline Interpolation
-#' 
-#' Perform cubic spline interpolation with nodes defined by the vectors x and
-#' y, each of length N. The spline is evaluated using the not-a-node end point
-#' conditions (same as Matlab). The y values of the spline curve will be
-#' evaluated at integer points from 0 to x[N-1]. The endpoint x[N-1] is assumed to be an
-#' integer, and the x values are assumed to be in ascending order, with x[0]
-#' equal to 0.
-#' @export
-#' @name cspline
-#' @param x,y Vectors giving the coordinates of the nodes.
-#' @return The cubic spline curve.
-cspline <- function(x, y) {
-    .Call('Rlibeemd_cspline', PACKAGE = 'Rlibeemd', x, y)
 }
 
