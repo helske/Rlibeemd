@@ -15,7 +15,7 @@ bibtype = "Article",
 title = "Introducing libeemd: a C library, a Python module, and an R package for performing the ensemble empirical mode decomposition",
 author = "Perttu J.J. Luukko, Jouni Helske, Esa Räsänen",
 journal = "Submitted.",
-year = "2014",
+year = "2015",
 key = "libeemd"
 )
 )

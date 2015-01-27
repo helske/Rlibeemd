@@ -16,8 +16,7 @@
 #'       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
 #'       Vol. 1 (2009) 1--41.}
 #'  \item{P. Luukko, J. Helske and E. Räsänen, 
-#' "Introducing libeemd: a C library, a Python module, and an R package for performing the ensemble 
-#' empirical mode decomposition", Submitted.}
+#' "Introducing libeemd: A program package for performing the ensemble empirical mode decomposition", Submitted.}
 #' }
 #' @examples
 #' ext <- extrema(UKgas)

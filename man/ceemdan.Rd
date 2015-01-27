@@ -55,12 +55,12 @@ ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2, main = "Quarterly UK gas consumptio
 # CEEMDAN for logarithmic demand, note that increasing ensemble size
 # from default will produce smoother results
 imfs <- ceemdan(log(UKgas))
-plot(ts.union(Seasonal = imfs[,1], Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]),
+plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[,1], Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]),
      main = "Quarterly UK gas consumption")
 }
 \references{
 \enumerate{
- \item{M. Torres et al, A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise
+ \item{M. Torres et al, "A Complete Ensemble Empirical Mode Decomposition with Adaptive Noise"
   IEEE Int. Conf. on Acoust., Speech and Signal Proc. ICASSP-11,
   (2011) 4144--4147}
  \item{N. E. Huang, Z. Shen and S. R. Long, "A new view of nonlinear water

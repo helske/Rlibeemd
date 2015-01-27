@@ -1,9 +1,10 @@
 src-i386/
 src-x64/
-.Rproj.user
+.Rproj.user/
+*.Rproj
 .Rhistory
 .RData
 *.o
 *.so
 *.dll
-.project
+*.project
