@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/helske/Rlibeemd.png?branch=master)](https://travis-ci.org/helske/Rlibeemd)
+
 # R package Rlibeemd #
 
 An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd)
