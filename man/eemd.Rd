@@ -54,7 +54,7 @@ y <- signal * (1 + ifelse(signal > 0.7, intermittent,0))
 
 plot(x=x,y=y,type="l")
 # Decompose with EEMD
-imfs <- eemd(y, num_siftings=10)
+imfs <- eemd(y, num_siftings = 10, ensemble_size = 50)
 
 plot(imfs)
 # High frequencies

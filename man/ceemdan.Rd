@@ -50,12 +50,14 @@ the sifting ends when either of the conditions is fulfilled.
 \examples{
 imfs <- ceemdan(UKgas)
 # trend extraction
-ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2, main = "Quarterly UK gas consumption", ylab = "Million therms")
+ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2,
+        main = "Quarterly UK gas consumption", ylab = "Million therms")
 
 # CEEMDAN for logarithmic demand, note that increasing ensemble size
-# from default will produce smoother results
-imfs <- ceemdan(log(UKgas))
-plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[,1], Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]),
+# will produce smoother results
+imfs <- ceemdan(log(UKgas), , ensemble_size = 50)
+plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[,1],
+     Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]),
      main = "Quarterly UK gas consumption")
 }
 \references{
