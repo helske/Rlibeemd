@@ -1,18 +1,18 @@
 Package: Rlibeemd
 Type: Package
-Title: Rlibeemd: Ensemble empirical mode decomposition (EEMD) and its complete
-    variant (CEEMDAN)
+Title: Ensemble Empirical Mode Decomposition (EEMD) and Its Complete
+    Variant (CEEMDAN)
 Version: 1.3.0
-Date: 2015-02-03
+Date: 2015-02-08
 Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
     comment = "R interface",email = "jouni.helske@jyu.fi"), person(given =
     "Perttu", family = "Luukko", role = "aut", comment = "Original libeemd C
     library"))
-Description: Package Rlibeemd contains functions for the ensemble empirical mode
+Description: An R interface for C library libeemd for performing the ensemble empirical mode
     decomposition (EEMD), its complete variant (CEEMDAN) or the regular
     empirical mode decomposition (EMD).
 License: GPL-3
-NeedsCompilation: Yes
+NeedsCompilation: yes
 SystemRequirements: GNU GSL
 Imports:
     Rcpp (>= 0.11.0)

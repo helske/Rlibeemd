@@ -29,7 +29,7 @@
 #'       }
 #' @seealso \code{\link{eemd}} 
 #' @examples
-#' imfs <- ceemdan(UKgas)
+#' imfs <- ceemdan(UKgas, threads = 1)
 #' # trend extraction
 #' ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2, 
 #'         main = "Quarterly UK gas consumption", ylab = "Million therms")
