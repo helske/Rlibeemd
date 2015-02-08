@@ -1,5 +1,10 @@
 /* Copyright 2013 Perttu Luukko
 
+ ** Modified for R compatibility by Jouni Helske:
+ ** Removed unnecessary declarations for 
+ **  emd_report_if_error
+ **  emd_report_to_file_if_error
+
  * This file is part of libeemd.
 
  * libeemd is free software: you can redistribute it and/or modify
@@ -58,10 +63,6 @@ typedef enum {
 	// Other errors
 	EMD_GSL_ERROR = 8
 } libeemd_error_code;
-
-// Helper functions to print an error message if an error occured
-void emd_report_if_error(libeemd_error_code err);
-void emd_report_to_file_if_error(FILE* file, libeemd_error_code err);
 
 // Main EEMD decomposition routine as described in:
 //   Z. Wu and N. Huang,

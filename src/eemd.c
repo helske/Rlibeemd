@@ -1,5 +1,12 @@
 /* Copyright 2013 Perttu Luukko
 
+ ** Modified for R compatibility by Jouni Helske:
+ ** Added #include #include <R_ext/Print.h>
+ ** Changed calls fprintf(stderr,...) to R compatible REprintf(...)
+ ** Removed unnecessary functions
+ **  emd_report_if_error
+ **  emd_report_to_file_if_error
+ 
  * This file is part of libeemd.
 
  * libeemd is free software: you can redistribute it and/or modify
@@ -15,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with libeemd.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include <R_ext/Print.h>
 #include "eemd.h"
 
 // If we are using OpenMP for parallel computation, we need locks to ensure
@@ -236,7 +243,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 		const int thread_id = omp_get_thread_num();
 		#if EEMD_DEBUG >= 1
 		#pragma omp single
-		fprintf(stderr, "Using %d thread(s) with OpenMP.\n", num_threads);
+		REprintf("Using %d thread(s) with OpenMP.\n", num_threads);
 		#endif
 		#else
 		const int num_threads = 1;
@@ -279,7 +286,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 			#pragma omp atomic
 			ensemble_counter++;
 			#if EEMD_DEBUG >= 1
-			fprintf(stderr, "Ensemble iteration %u/%u done.\n", ensemble_counter, ensemble_size);
+			REprintf("Ensemble iteration %u/%u done.\n", ensemble_counter, ensemble_size);
 			#endif
 		}
 		// Free resources
@@ -358,7 +365,7 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		const int thread_id = omp_get_thread_num();
 		#if EEMD_DEBUG >= 1
 		#pragma omp single
-		fprintf(stderr, "Using %d thread(s) with OpenMP.\n", num_threads);
+		REprintf("Using %d thread(s) with OpenMP.\n", num_threads);
 		#endif
 		#else
 		num_threads = 1;
@@ -504,7 +511,7 @@ static libeemd_error_code _sift(double* restrict input, sifting_workspace*
 		(*sift_counter)++;
 		#if EEMD_DEBUG >= 1
 		if (*sift_counter == 10000) {
-			fprintf(stderr, "Something is probably wrong. Sift counter has reached 10000.\n");
+			REprintf("Something is probably wrong. Sift counter has reached 10000.\n");
 		}
 		#endif
 		prev_num_max = num_max;
@@ -591,7 +598,7 @@ static libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w
 		array_add(input, N, output+N*imf_i);
 		release_lock(locks[imf_i]);
 		#if EEMD_DEBUG >= 2
-		fprintf(stderr, "IMF %zd saved after %u siftings.\n", imf_i+1, sift_counter);
+		REprintf("IMF %zd saved after %u siftings.\n", imf_i+1, sift_counter);
 		#endif
 	}
 	// Save final residual
@@ -675,7 +682,7 @@ void emd_find_extrema(double const* restrict x, size_t N,
 		else { // Staying flat
 			flat_counter++;
 			#if EEMD_DEBUG >= 3
-			fprintf(stderr, "Warning: a flat slope found in data. The results will differ from the reference EEMD implementation.\n");
+			REprintf("Warning: a flat slope found in data. The results will differ from the reference EEMD implementation.\n");
 			#endif
 		}
 	}
@@ -800,7 +807,7 @@ libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* r
 												&g_vec.vector,
 												&solution_vec.vector);
 	if (status) {
-		fprintf(stderr, "Error reported by gsl_linalg_solve_tridiag: %s\n",
+		REprintf("Error reported by gsl_linalg_solve_tridiag: %s\n",
 				gsl_strerror(status));
 		return EMD_GSL_ERROR;
 	}
@@ -832,44 +839,4 @@ libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* r
 		spline_y[j] = a_i + dx*(b_i + dx*(c_i + dx*d_i));
 	}
 	return EMD_SUCCESS;
-}
-
-// Helper functions for printing what error codes mean
-void emd_report_to_file_if_error(FILE* file, libeemd_error_code err) {
-	if (err == EMD_SUCCESS) {
-		return;
-	}
-	fprintf(file, "libeemd error: ");
-	switch (err) {
-		case EMD_INVALID_ENSEMBLE_SIZE :
-			fprintf(file, "Invalid ensemble size (zero or negative)\n");
-			break;
-		case EMD_INVALID_NOISE_STRENGTH :
-			fprintf(file, "Invalid noise strength (negative)\n");
-			break;
-		case EMD_NOISE_ADDED_TO_EMD :
-			fprintf(file, "Positive noise strength but ensemble size is one (regular EMD)\n");
-			break;
-		case EMD_NO_NOISE_ADDED_TO_EEMD :
-			fprintf(file, "Ensemble size is more than one (EEMD) but noise strength is zero\n");
-			break;
-		case EMD_NO_CONVERGENCE_POSSIBLE :
-			fprintf(file, "Stopping criteria invalid: would never converge\n");
-			break;
-		case EMD_NOT_ENOUGH_POINTS_FOR_SPLINE :
-			fprintf(file, "Spline evaluation tried with insufficient points\n");
-			break;
-		case EMD_INVALID_SPLINE_POINTS :
-			fprintf(file, "Spline evaluation points invalid\n");
-			break;
-		case EMD_GSL_ERROR :
-			fprintf(file, "Error reported by GSL library\n");
-			break;
-		default :
-			fprintf(file, "Error code with unknown meaning. Please file a bug!\n");
-	}
-}
-
-void emd_report_if_error(libeemd_error_code err) {
-	emd_report_to_file_if_error(stderr, err);
 }
