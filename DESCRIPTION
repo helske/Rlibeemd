@@ -8,9 +8,9 @@ Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
     comment = "R interface",email = "jouni.helske@jyu.fi"), person(given =
     "Perttu", family = "Luukko", role = "aut", comment = "Original libeemd C
     library"))
-Description: An R interface for C library libeemd for performing the ensemble empirical mode
-    decomposition (EEMD), its complete variant (CEEMDAN) or the regular
-    empirical mode decomposition (EMD).
+Description: An R interface for C library libeemd for performing the ensemble
+    empirical mode decomposition (EEMD), its complete variant (CEEMDAN) or the
+    regular empirical mode decomposition (EMD).
 License: GPL-3
 NeedsCompilation: yes
 SystemRequirements: GNU GSL
