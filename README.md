@@ -1,12 +1,12 @@
 [![Build Status](https://travis-ci.org/helske/Rlibeemd.png?branch=master)](https://travis-ci.org/helske/Rlibeemd)
 
-# R package Rlibeemd #
+# Rlibeemd #
 
-An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd)
+An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd) for ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN)
 
 ### Using libeemd ###
 
-Package will be soon on CRAN. 
+Package is now available at [CRAN](https://bitbucket.org/luukko/libeemd) 
 
 If you want to compile Rlibeemd from source, you will also need GNU Scientific Library.
 
