@@ -9,7 +9,7 @@ Package Rlibeemd contains functions for the ensemble empirical mode decompositio
 its complete variant (CEEMDAN) or the regular empirical mode decomposition (EMD).
 }
 \details{
-Package is based on the libeemd C library.
+Package is based on the libeemd C library: \url{https://bitbucket.org/luukko/libeemd}
 }
 \references{
 \itemize{

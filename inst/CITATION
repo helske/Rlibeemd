@@ -12,9 +12,10 @@ key = "Rlibeemd"
 ),
 bibentry(
 bibtype = "Article",
-title = "Introducing libeemd: a C library, a Python module, and an R package for performing the ensemble empirical mode decomposition",
+title = "Introducing libeemd: A program package for performing the ensemble
+empirical mode decomposition",
 author = "Perttu J.J. Luukko, Jouni Helske, Esa Räsänen",
-journal = "Submitted.",
+journal = "Submitted",
 year = "2015",
 key = "libeemd"
 )

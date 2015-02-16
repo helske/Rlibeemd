@@ -26,3 +26,7 @@ extrema <- function(x) {
     .Call('Rlibeemd_extrema', PACKAGE = 'Rlibeemd', x)
 }
 
+gslErrorHandlerOff <- function() {
+    invisible(.Call('Rlibeemd_gslErrorHandlerOff', PACKAGE = 'Rlibeemd'))
+}
+

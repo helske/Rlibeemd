@@ -79,3 +79,14 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// gslErrorHandlerOff
+void gslErrorHandlerOff();
+RcppExport SEXP Rlibeemd_gslErrorHandlerOff() {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        gslErrorHandlerOff();
+    }
+    return R_NilValue;
+END_RCPP
+}
