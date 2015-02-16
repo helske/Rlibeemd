@@ -1,5 +1,11 @@
+## Process this file with autoconf to produce a configure script.
+##
+## Configure.ac for Rlibeemd
+##
+## Copied from RcppGSL's (Francois & Eddelbuettel) example package
 
-AC_INIT([Rlibeemd], 1.3.0)
+# The version set here will propagate to other files from here
+AC_INIT([Rlibeemd], 1.3.2)
 
 ## Use gsl-config to find arguments for compiler and linker flags
 ##
