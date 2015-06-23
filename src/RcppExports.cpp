@@ -6,87 +6,69 @@
 using namespace Rcpp;
 
 // ceemdanR
-NumericMatrix ceemdanR(NumericVector input, double num_imfs = 0, unsigned int ensemble_size = 250, double noise_strength = 0.2, unsigned int S_number = 4, unsigned int num_siftings = 50, unsigned long int rng_seed = 0, int threads = 0);
+NumericMatrix ceemdanR(NumericVector input, double num_imfs, unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 RcppExport SEXP Rlibeemd_ceemdanR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP );
-        Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP );
-        Rcpp::traits::input_parameter< unsigned int >::type ensemble_size(ensemble_sizeSEXP );
-        Rcpp::traits::input_parameter< double >::type noise_strength(noise_strengthSEXP );
-        Rcpp::traits::input_parameter< unsigned int >::type S_number(S_numberSEXP );
-        Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP );
-        Rcpp::traits::input_parameter< unsigned long int >::type rng_seed(rng_seedSEXP );
-        Rcpp::traits::input_parameter< int >::type threads(threadsSEXP );
-        NumericMatrix __result = ceemdanR(input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type ensemble_size(ensemble_sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type noise_strength(noise_strengthSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type S_number(S_numberSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP);
+    Rcpp::traits::input_parameter< unsigned long int >::type rng_seed(rng_seedSEXP);
+    Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
+    __result = Rcpp::wrap(ceemdanR(input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads));
+    return __result;
 END_RCPP
 }
 // eemdR
-NumericMatrix eemdR(NumericVector input, double num_imfs = 0, unsigned int ensemble_size = 250, double noise_strength = 0.2, unsigned int S_number = 4, unsigned int num_siftings = 50, unsigned long int rng_seed = 0, int threads = 0);
+NumericMatrix eemdR(NumericVector input, double num_imfs, unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 RcppExport SEXP Rlibeemd_eemdR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP );
-        Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP );
-        Rcpp::traits::input_parameter< unsigned int >::type ensemble_size(ensemble_sizeSEXP );
-        Rcpp::traits::input_parameter< double >::type noise_strength(noise_strengthSEXP );
-        Rcpp::traits::input_parameter< unsigned int >::type S_number(S_numberSEXP );
-        Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP );
-        Rcpp::traits::input_parameter< unsigned long int >::type rng_seed(rng_seedSEXP );
-        Rcpp::traits::input_parameter< int >::type threads(threadsSEXP );
-        NumericMatrix __result = eemdR(input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type ensemble_size(ensemble_sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type noise_strength(noise_strengthSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type S_number(S_numberSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP);
+    Rcpp::traits::input_parameter< unsigned long int >::type rng_seed(rng_seedSEXP);
+    Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
+    __result = Rcpp::wrap(eemdR(input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads));
+    return __result;
 END_RCPP
 }
 // emd_num_imfsR
 int emd_num_imfsR(double N);
 RcppExport SEXP Rlibeemd_emd_num_imfsR(SEXP NSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< double >::type N(NSEXP );
-        int __result = emd_num_imfsR(N);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type N(NSEXP);
+    __result = Rcpp::wrap(emd_num_imfsR(N));
+    return __result;
 END_RCPP
 }
 // extrema
 List extrema(NumericVector x);
 RcppExport SEXP Rlibeemd_extrema(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
-        List __result = extrema(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    __result = Rcpp::wrap(extrema(x));
+    return __result;
 END_RCPP
 }
 // gslErrorHandlerOff
 void gslErrorHandlerOff();
 RcppExport SEXP Rlibeemd_gslErrorHandlerOff() {
 BEGIN_RCPP
-    {
-        Rcpp::RNGScope __rngScope;
-        gslErrorHandlerOff();
-    }
+    Rcpp::RNGScope __rngScope;
+    gslErrorHandlerOff();
     return R_NilValue;
 END_RCPP
 }

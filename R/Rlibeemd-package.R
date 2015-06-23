@@ -7,7 +7,7 @@
 #' @references
 #' \itemize{
 #'  \item{P. Luukko, J. Helske and E. Räsänen, 
-#' "Introducing libeemd: A program package for performing the ensemble empirical mode decomposition", Submitted.}
+#' "Introducing libeemd: A program package for performing the ensemble empirical mode decomposition", Computational Statistics (2015).}
 #' \item{ Z. Wu and N. Huang, "Ensemble Empirical Mode Decomposition: A 
 #'       Noise-Assisted Data Analysis Method", Advances in Adaptive Data Analysis,
 #'       Vol. 1 (2009) 1--41.}

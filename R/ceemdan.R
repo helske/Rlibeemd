@@ -31,25 +31,25 @@
 #' @examples
 #' imfs <- ceemdan(UKgas, threads = 1)
 #' # trend extraction
-#' ts.plot(UKgas, imfs[,ncol(imfs)], col = 1:2, 
+#' ts.plot(UKgas, imfs[, ncol(imfs)], col = 1:2, 
 #'         main = "Quarterly UK gas consumption", ylab = "Million therms")
 #' 
 #' # CEEMDAN for logarithmic demand, note that increasing ensemble size 
 #' # will produce smoother results
 #' imfs <- ceemdan(log(UKgas), ensemble_size = 50, threads = 1)
-#' plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[,1], 
-#'      Irregular = rowSums(imfs[,2:5]), Trend = imfs[,6]), 
+#' plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[, 1], 
+#'      Irregular = rowSums(imfs[, 2:5]), Trend = imfs[, 6]), 
 #'      main = "Quarterly UK gas consumption")
 ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, 
                     num_siftings = 50L, rng_seed = 0L, threads = 0L) {
-  output<-.Call('Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 
+  output <- .Call('Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 
              noise_strength, S_number, num_siftings, rng_seed, threads)
-  if(inherits(input,"ts")){
-    tsp(output)<-tsp(input)
-  } else tsp(output)<-c(1,nrow(output),1)
-  if(ncol(output)>1){
-  class(output)<-c("mts","ts","matrix")
-  colnames(output)<-c(paste("IMF",1:(ncol(output)-1)),"Residual")
-  } else class(output)<-"ts"
+  if(inherits(input, "ts")){
+    tsp(output) <- tsp(input)
+  } else tsp(output) <- c(1, nrow(output), 1)
+  if(ncol(output) > 1){
+  class(output) <- c("mts","ts","matrix")
+  colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
+  } else class(output) <- "ts"
   output
 }

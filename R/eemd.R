@@ -38,28 +38,30 @@
 #'   spectrum", Annual Review of Fluid Mechanics, Vol. 31 (1999) 417--457} }
 #' @seealso \code{\link{ceemdan}}
 #' @examples
-#' x <- seq(0, 2*pi, length.out=500)
+#' x <- seq(0, 2*pi, length.out = 500)
 #' signal <- sin(4*x)
-#' intermittent <- 0.1*sin(80*x)
-#' y <- signal * (1 + ifelse(signal > 0.7, intermittent,0))
+#' intermittent <- 0.1 * sin(80 * x)
+#' y <- signal * (1 + ifelse(signal > 0.7, intermittent, 0))
 #' 
-#' plot(x=x,y=y,type="l")
+#' plot(x = x,y = y,type = "l")
 #' # Decompose with EEMD
 #' imfs <- eemd(y, num_siftings = 10, ensemble_size = 50, threads = 1)
 #'  
 #' plot(imfs)
 #' # High frequencies
-#' ts.plot(rowSums(imfs[,1:3]))
+#' ts.plot(rowSums(imfs[, 1:3]))
 #' # Low frequencies
-#' ts.plot(rowSums(imfs[,4:ncol(imfs)]))
-eemd <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L, threads = 0L) {
-  output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads)
-  if(inherits(input,"ts")){
-    tsp(output)<-tsp(input)
-  } else tsp(output)<-c(1,nrow(output),1)
-  if(ncol(output)>1){
-    class(output)<-c("mts","ts","matrix")
-    colnames(output)<-c(paste("IMF",1:(ncol(output)-1)),"Residual")
-  } else class(output)<-"ts"
+#' ts.plot(rowSums(imfs[, 4:ncol(imfs)]))
+eemd <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, 
+                 num_siftings = 50L, rng_seed = 0L, threads = 0L) {
+  output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 
+                  noise_strength, S_number, num_siftings, rng_seed, threads)
+  if(inherits(input, "ts")){
+    tsp(output) <- tsp(input)
+  } else tsp(output) <- c(1, nrow(output), 1)
+  if(ncol(output) > 1){
+    class(output) <- c("mts", "ts", "matrix")
+    colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
+  } else class(output) <- "ts"
   output
 }

@@ -2,8 +2,8 @@ Package: Rlibeemd
 Type: Package
 Title: Ensemble Empirical Mode Decomposition (EEMD) and Its Complete
     Variant (CEEMDAN)
-Version: 1.3.2
-Date: 2015-02-16
+Version: 1.3.3
+Date: 2015-06-23
 Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
     comment = "R interface",email = "jouni.helske@jyu.fi"), person(given =
     "Perttu", family = "Luukko", role = "aut", comment = "Original libeemd C
