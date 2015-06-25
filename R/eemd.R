@@ -54,6 +54,8 @@
 #' ts.plot(rowSums(imfs[, 4:ncol(imfs)]))
 eemd <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, 
                  num_siftings = 50L, rng_seed = 0L, threads = 0L) {
+  if (!all(is.finite(input))) 
+    stop("'input' must contain finite values only")
   output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 
                   noise_strength, S_number, num_siftings, rng_seed, threads)
   if(inherits(input, "ts")){

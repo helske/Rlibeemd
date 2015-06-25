@@ -29,6 +29,8 @@
 #'       }
 #' @seealso \code{\link{eemd}}, \code{\link{ceemdan}} 
 emd <- function(input, num_imfs = 0, S_number = 4L, num_siftings = 50L) {
+  if (!all(is.finite(input))) 
+    stop("'input' must contain finite values only")
   output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size = 1L, 
              noise_strength = 0L, S_number, num_siftings, rng_seed = 0L, threads = 0L)
   if(inherits(input, "ts")){
