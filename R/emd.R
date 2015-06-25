@@ -29,8 +29,8 @@
 #'       }
 #' @seealso \code{\link{eemd}}, \code{\link{ceemdan}} 
 emd <- function(input, num_imfs = 0, S_number = 4L, num_siftings = 50L) {
-  output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size = 1, 
-             noise_strength = 0, S_number, num_siftings, rng_seed = 0)
+  output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size = 1L, 
+             noise_strength = 0L, S_number, num_siftings, rng_seed = 0L, threads = 0L)
   if(inherits(input, "ts")){
     tsp(output) <- tsp(input)
   } else tsp(output) <- c(1, nrow(output), 1)

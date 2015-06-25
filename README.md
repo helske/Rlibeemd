@@ -6,7 +6,7 @@ An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd) for
 
 ### Using libeemd ###
 
-Package is now available at [CRAN](http://cran.r-project.org/web/packages/Rlibeemd/index.html) 
+Package is now available at [CRAN](http://cran.r-project.org/web/packages/Rlibeemd/index.html).
 
 If you want to compile Rlibeemd from source, you will also need GNU Scientific Library.
 
