@@ -54,12 +54,16 @@
 #' ts.plot(rowSums(imfs[, 4:ncol(imfs)]))
 eemd <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, 
                  num_siftings = 50L, rng_seed = 0L, threads = 0L) {
-  output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, 
+  if (any(is.na(input)))
+    stop("No missing values allowed in input.")
+  if (num_siftings < 0)
+    stop("Argument 'num_siftings' must be non-negative")
+  output <- eemdR(input, num_imfs, ensemble_size, 
                   noise_strength, S_number, num_siftings, rng_seed, threads)
-  if(inherits(input, "ts")){
+  if (inherits(input, "ts")) {
     tsp(output) <- tsp(input)
   } else tsp(output) <- c(1, nrow(output), 1)
-  if(ncol(output) > 1){
+  if (ncol(output) > 1) {
     class(output) <- c("mts", "ts", "matrix")
     colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
   } else class(output) <- "ts"

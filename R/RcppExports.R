@@ -9,21 +9,12 @@ eemdR <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.
     .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads)
 }
 
-#' Number of IMFs
-#' 
-#' Return the number of IMFs extracted from input data of length N, including
-#' the final residual. This is just 1+[log_2(N)] for N>3.
-#' @export
-#' @name nIMFs
-#' @param N An integer defining the length of input data.
-#' @return The number of IMFs which would be extracted from input data of length N, including
-#' the final residual.
-emd_num_imfs <- function(N) {
+emd_num_imfsR <- function(N) {
     .Call('Rlibeemd_emd_num_imfsR', PACKAGE = 'Rlibeemd', N)
 }
 
-extrema <- function(x) {
-    .Call('Rlibeemd_extrema', PACKAGE = 'Rlibeemd', x)
+extremaR <- function(x) {
+    .Call('Rlibeemd_extremaR', PACKAGE = 'Rlibeemd', x)
 }
 
 gslErrorHandlerOff <- function() {

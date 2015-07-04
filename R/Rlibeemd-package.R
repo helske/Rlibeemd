@@ -23,4 +23,5 @@
 #' @aliases Rlibeemd
 #' @useDynLib Rlibeemd
 #' @import Rcpp
+#' @importFrom stats time tsp "tsp<-"
 NULL

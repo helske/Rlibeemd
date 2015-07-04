@@ -52,14 +52,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// extrema
-List extrema(NumericVector x);
-RcppExport SEXP Rlibeemd_extrema(SEXP xSEXP) {
+// extremaR
+List extremaR(NumericVector x);
+RcppExport SEXP Rlibeemd_extremaR(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    __result = Rcpp::wrap(extrema(x));
+    __result = Rcpp::wrap(extremaR(x));
     return __result;
 END_RCPP
 }

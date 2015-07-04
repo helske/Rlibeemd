@@ -9,7 +9,7 @@ extern "C"
 
 using namespace Rcpp;
 // [[Rcpp::export]]
-List extrema(NumericVector x){
+List extremaR(NumericVector x){
   
   size_t N = x.size();
   NumericVector maxx(x.size());

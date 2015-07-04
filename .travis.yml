@@ -5,6 +5,12 @@ warnings_are_errors: true
 
 apt_packages: 
  - libgsl0-dev
-
+ 
+r_github_packages:
+ - jimhester/covr
+ 
+after_success:
+   - Rscript -e 'library(covr);codecov()'
+   
 r_check_args: "--as-cran"
 

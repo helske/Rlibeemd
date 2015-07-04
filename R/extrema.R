@@ -37,7 +37,7 @@
 #' lines(ext$maxima[26:28, ],col = 4) 
 #' 
 extrema <- function(input) {  
-  output <- .Call('Rlibeemd_extrema', PACKAGE = 'Rlibeemd', input)
+  output <- extremaR(input)
    if (inherits(input, "ts")) {
      output$x_max <- time(input)[output$x_max + 1]
      output$x_min <- time(input)[output$x_min + 1]
