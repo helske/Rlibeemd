@@ -7,9 +7,10 @@ apt_packages:
  - libgsl0-dev
  
 r_github_packages:
- - helske/covr
+ - jimhester/covr
  
 after_success:
-   - Rscript -e 'library(covr);coveralls()'
+ - Rscript -e 'library(covr);coveralls()'
+ 
 r_check_args: "--as-cran"
 
