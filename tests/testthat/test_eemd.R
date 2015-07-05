@@ -9,11 +9,13 @@ test_that("bogus arguments throw error",{
   expect_error(eemd(1:3, num_imfs = -1, threads = 1))
   expect_error(eemd(1:3, num_siftings = -3, threads = 1))
   expect_error(eemd(1:3, ensemble_size = 0, threads = 1))
+  expect_error(eemd(1:3, ensemble_size = 10, noise_strength = 0, threads = 1))
+  expect_error(eemd(1:3, ensemble_size = 1, noise_strength = 1, threads = 1))
   expect_error(eemd(1:3, num_imfs = "lots", threads = 1))
 })
 
 test_that("series full of zeroes should produce only zeroes",{
-  x <- numeric(64)
+  x <- ts(numeric(64))
   imfs <- eemd(x, ensemble_size = 10, threads = 1)
   expect_true(all(imfs == 0))
 })

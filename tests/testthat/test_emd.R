@@ -13,6 +13,9 @@ test_that("output of EMD is of correct size and form",{
   imfs <- emd(x, num_imfs = 3)
   expect_identical(dim(imfs), c(64L, 3L))
   expect_identical(class(imfs), c("mts", "ts", "matrix"))
+  x <- ts(x, start = 2000, frequency = 12)
+  imfs <- emd(x, num_imfs = 3)
+  expect_identical(tsp(imfs), tsp(x))
 })
 
 test_that("EMD is EEMD",{
