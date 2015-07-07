@@ -2,4 +2,4 @@ README.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
-*.png
+^.*\.png$
