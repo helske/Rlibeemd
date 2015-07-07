@@ -17,7 +17,7 @@ data(UKgas, package = "datasets")
 imfs <- ceemdan(UKgas, ensemble_size = 1000)
 plot(imfs, main = "Five IMFs and residual extracted by CEEMDAN algorithm")
 ```
-![ceemdan](https://github.com/helske/Rlibeemd/blob/master/ceemdan.png)
+![imfs](https://github.com/helske/Rlibeemd/blob/master/imfs.png)
 
 The residual components shows clear trend whereas the first IMF see so contain clear multiplicative trend. The remaining IMFs are bit more complex, and one could argue that they are partly seasonal, trend or just some irregularity i.e. noise. 
 
