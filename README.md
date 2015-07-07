@@ -17,6 +17,7 @@ data(UKgas, package = "datasets")
 imfs <- ceemdan(UKgas, ensemble_size = 1000)
 plot(imfs, main = "Five IMFs and residual extracted by CEEMDAN algorithm")
 ```
+![ceemdan](https://github.com/helske/Rlibeemd/blob/master/ceemdan.png)
 
 The residual components shows clear trend whereas the first IMF see so contain clear multiplicative trend. The remaining IMFs are bit more complex, and one could argue that they are partly seasonal, trend or just some irregularity i.e. noise. 
 
@@ -24,8 +25,9 @@ Lets compare the decomposition with basic structural time series model fit from 
 
 ```{r, fig.height = 4, fig.width = 8}
 bsm <- tsSmooth(StructTS(UKgas))
-plot(bsm[, c(1, 3)])
+plot(bsm[, c(1, 3)], main = "Local linear trend and seasonal components by StructTS")
 ```
+![bsm](https://github.com/helske/Rlibeemd/blob/master/bsm.png)
 
 ``StructTS`` decomposes the data for three components, where one of the components is (possibly time varying) slope, which has no direct effect to overall signal (it is the slope of the level component).
 
@@ -35,7 +37,7 @@ ts.plot(cbind(UKgas, imfs[, ncol(imfs)], rowSums(imfs[, 5:6]), bsm[,"level"]), c
 legend("topleft", c("Observations", "Residual", "Last IMF + residual", "Trend from BSM"),
   col = 1:4, lty = 1)
 ```
-![ceemdan_and_bsm](https://github.com/helske/seqHMM/blob/master/Examples/ssp1.png)
+![ceemdan_and_bsm](https://github.com/helske/Rlibeemd/blob/master/ceemdan_and_bsm.png)
 
 The IMF_5 + residual is quite close to the trend obtained by structural time series model of `StructTS`.
 
