@@ -1,6 +1,3 @@
----
-output: html_document
----
 [![Build Status](https://travis-ci.org/helske/Rlibeemd.png?branch=master)](https://travis-ci.org/helske/Rlibeemd)
 [![codecov.io](http://codecov.io/github/helske/Rlibeemd/coverage.svg?branch=master)](http://codecov.io/github/helske/Rlibeemd?branch=master)
 [![downloads](http://cranlogs.r-pkg.org/badges/Rlibeemd)](http://cranlogs.r-pkg.org/badges/Rlibeemd)
@@ -11,8 +8,8 @@ output: html_document
 An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd) for ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN). These methods decompose possibly nonlinear and/or nonstationary time series data into a finite amount of components (called IMFs, insintric mode functions) separated by instantaneous frequencies. This decomposition provides a powerful method to look into the different processes behind a given time series, and provides a way to separate short time-scale events from a general trend.
 
 ### Example ###
-Here an CEEMDAN decomposition is performed for the UK gas consumption series (length $n = 108$). 
-By default, `ceemdan` extracts $[log_2(n)]$ components, so here we get five IMFs and the residual.
+Here an CEEMDAN decomposition is performed for the UK gas consumption series (length n = 108). 
+By default, `ceemdan` extracts [log_2(n)] components, so here we get five IMFs and the residual.
 
 ```{r, fig.height = 4, fig.width = 8}
 library("Rlibeemd")
@@ -38,7 +35,7 @@ ts.plot(cbind(UKgas, imfs[, ncol(imfs)], rowSums(imfs[, 5:6]), bsm[,"level"]), c
 legend("topleft", c("Observations", "Residual", "Last IMF + residual", "Trend from BSM"),
   col = 1:4, lty = 1)
 ```
-The $IMF_5$ + residual is quite close to the trend obtained by structural time series model of `StructTS`.
+The IMF_5 + residual is quite close to the trend obtained by structural time series model of `StructTS`.
 
 
 
