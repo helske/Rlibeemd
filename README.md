@@ -15,7 +15,7 @@ By default, `ceemdan` extracts [log_2(n)] components, so here we get five IMFs a
 library("Rlibeemd")
 data(UKgas, package = "datasets")
 imfs <- ceemdan(UKgas, ensemble_size = 1000)
-plot(imfs)
+plot(imfs, main = "Five IMFs and residual extracted by CEEMDAN algorithm")
 ```
 
 The residual components shows clear trend whereas the first IMF see so contain clear multiplicative trend. The remaining IMFs are bit more complex, and one could argue that they are partly seasonal, trend or just some irregularity i.e. noise. 
@@ -35,6 +35,8 @@ ts.plot(cbind(UKgas, imfs[, ncol(imfs)], rowSums(imfs[, 5:6]), bsm[,"level"]), c
 legend("topleft", c("Observations", "Residual", "Last IMF + residual", "Trend from BSM"),
   col = 1:4, lty = 1)
 ```
+![ceemdan_and_bsm](https://github.com/helske/seqHMM/blob/master/Examples/ssp1.png)
+
 The IMF_5 + residual is quite close to the trend obtained by structural time series model of `StructTS`.
 
 
