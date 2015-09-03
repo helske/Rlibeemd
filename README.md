@@ -19,9 +19,9 @@ plot(imfs, main = "Five IMFs and residual extracted by CEEMDAN algorithm")
 ```
 ![imfs](https://github.com/helske/Rlibeemd/blob/master/imfs.png)
 
-The residual components shows clear trend whereas the first IMF see so contain clear multiplicative trend. The remaining IMFs are bit more complex, and one could argue that they are partly seasonal, trend or just some irregularity i.e. noise. 
+The residual components shows smooth trend whereas the first IMF contains clear multiplicative trend. The remaining IMFs are bit more complex, and one could argue that they are partly seasonal, trend or just some irregularity i.e. noise. 
 
-Lets compare the decomposition with basic structural time series model fit from `StructTS` (for smoothing of more complex state space models, one could use [KFAS](https://github.com/helske/KFAS))
+Let us compare the decomposition with basic structural time series model fit from `StructTS` (for smoothing of more complex state space models, one could use [KFAS](https://github.com/helske/KFAS))
 
 ```{r, fig.height = 4, fig.width = 8}
 bsm <- tsSmooth(StructTS(UKgas))
@@ -40,8 +40,6 @@ legend("topleft", c("Observations", "Residual", "Last IMF + residual", "Trend fr
 ![ceemdan_and_bsm](https://github.com/helske/Rlibeemd/blob/master/ceemdan_and_bsm.png)
 
 The IMF_5 + residual is quite close to the trend obtained by structural time series model of `StructTS`.
-
-
 
 
 ### Installing libeemd ###
