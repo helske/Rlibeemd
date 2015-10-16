@@ -15,6 +15,7 @@ NumericMatrix eemdR(NumericVector input, double num_imfs=0, unsigned int ensembl
 double noise_strength=0.2, unsigned int S_number=4, unsigned int num_siftings=50, 
 unsigned long int rng_seed=0, int threads=0){
   
+  
   #ifdef _OPENMP
   int old_maxthreads = 1;
   if (threads>0) {
@@ -38,7 +39,7 @@ unsigned long int rng_seed=0, int threads=0){
     omp_set_num_threads(old_maxthreads);    
   }
   #endif
-  
+ 
   if(err!=EMD_SUCCESS){
     printError(err);
   }
