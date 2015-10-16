@@ -31,14 +31,17 @@
 emd <- function(input, num_imfs = 0, S_number = 4L, num_siftings = 50L) {
   if (!all(is.finite(input))) 
     stop("'input' must contain finite values only")
-  output <- .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size = 1L, 
-             noise_strength = 0L, S_number, num_siftings, rng_seed = 0L, threads = 0L)
-  if(inherits(input, "ts")){
+  if (num_siftings < 0)
+    stop("Argument 'num_siftings' must be non-negative")
+  output <- eemdR(input, num_imfs, ensemble_size = 1L, 
+    noise_strength = 0L, S_number, num_siftings, 
+    rng_seed = 0L, threads = 0L)
+  if (inherits(input, "ts")) {
     tsp(output) <- tsp(input)
   } else tsp(output) <- c(1, nrow(output), 1)
-  if(ncol(output) > 1){
-  class(output) <- c("mts", "ts", "matrix")
-  colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
+  if (ncol(output) > 1) {
+    class(output) <- c("mts", "ts", "matrix")
+    colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
   } else class(output) <- "ts"
   output
 }
