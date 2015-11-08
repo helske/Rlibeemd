@@ -16,6 +16,6 @@ the final residual.
 }
 \description{
 Return the number of IMFs extracted from input data of length N, including
-the final residual. This is just 1+[log_2(N)] for N>3.
+the final residual. This is just [log_2(N)] for N>3.
 }
 
