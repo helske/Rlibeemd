@@ -40,21 +40,35 @@
 #' plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[, 1], 
 #'      Irregular = rowSums(imfs[, 2:5]), Trend = imfs[, 6]), 
 #'      main = "Quarterly UK gas consumption")
-ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, 
-                    num_siftings = 50L, rng_seed = 0L, threads = 0L) {
-
+ceemdan <- function(input, num_imfs = 0, ensemble_size = 250L, 
+  noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L,
+  threads = 0L) {
+  
   if (!all(is.finite(input))) 
-    stop("'input' must contain finite values only")
+    stop("'input' must contain finite values only.")
+  if (num_imfs < 0)
+    stop("Argument 'num_imfs' must be non-negative integer.")
+  if (ensemble_size < 0)
+    stop("Argument 'ensemble_size' must be non-negative integer.")
+  if (noise_strength < 0)
+    stop("Argument 'noise_strength' must be non-negative.")
+  if (S_number < 0)
+    stop("Argument 'S_number' must be non-negative integer.")
   if (num_siftings < 0)
-    stop("Argument 'num_siftings' must be non-negative")
+    stop("Argument 'num_siftings' must be non-negative integer.")
+  if (rng_seed < 0)
+    stop("Argument 'rng_seed' must be non-negative integer.")
+  if (threads < 0)
+    stop("Argument 'threads' must be non-negative integer.")
+  
   output <- ceemdanR(input, num_imfs, ensemble_size, 
-             noise_strength, S_number, num_siftings, rng_seed, threads)
+    noise_strength, S_number, num_siftings, rng_seed, threads)
   if (inherits(input, "ts")) {
     tsp(output) <- tsp(input)
   } else tsp(output) <- c(1, nrow(output), 1)
   if (ncol(output) > 1) {
-  class(output) <- c("mts","ts","matrix")
-  colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
+    class(output) <- c("mts","ts","matrix")
+    colnames(output) <- c(paste("IMF", 1:(ncol(output) - 1)), "Residual")
   } else class(output) <- "ts"
   output
 }

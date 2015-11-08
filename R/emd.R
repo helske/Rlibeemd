@@ -30,9 +30,14 @@
 #' @seealso \code{\link{eemd}}, \code{\link{ceemdan}} 
 emd <- function(input, num_imfs = 0, S_number = 4L, num_siftings = 50L) {
   if (!all(is.finite(input))) 
-    stop("'input' must contain finite values only")
+    stop("'input' must contain finite values only.")
+  if (num_imfs < 0)
+    stop("Argument 'num_imfs' must be non-negative integer.")
+  if (S_number < 0)
+    stop("Argument 'S_number' must be non-negative integer.")
   if (num_siftings < 0)
-    stop("Argument 'num_siftings' must be non-negative")
+    stop("Argument 'num_siftings' must be non-negative integer.")
+  
   output <- eemdR(input, num_imfs, ensemble_size = 1L, 
     noise_strength = 0L, S_number, num_siftings, 
     rng_seed = 0L, threads = 0L)
