@@ -9,3 +9,6 @@ src-x64/
 *.dll
 *.project
 .Rproj.user
+config.log
+config.status
+src/Makevars

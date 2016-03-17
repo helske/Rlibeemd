@@ -3,3 +3,6 @@ README.md
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^.*\.png$
+config.log
+config.status
+src/Makevars
