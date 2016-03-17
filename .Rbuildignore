@@ -1,8 +1,8 @@
-README.md
+^README.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^.*\.png$
-config.log
-config.status
-src/Makevars
+^config\.log$
+^config\.status$
+^src/Makevars$
