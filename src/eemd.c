@@ -1,12 +1,18 @@
-/* Copyright 2013 Perttu Luukko
-
+/*
+ ** Based on libeemd 1.4 
+ **
  ** Modified for R compatibility by Jouni Helske:
  ** Added #include #include <R_ext/Print.h>
  ** Changed calls fprintf(stderr,...) to R compatible REprintf(...)
  ** Removed unnecessary functions
  **  emd_report_if_error
  **  emd_report_to_file_if_error
- 
+ **  
+ **  
+*/
+
+/* Copyright 2013 Perttu Luukko
+
  * This file is part of libeemd.
 
  * libeemd is free software: you can redistribute it and/or modify
@@ -22,9 +28,9 @@
  * You should have received a copy of the GNU General Public License
  * along with libeemd.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <R_ext/Print.h>
-#include "eemd.h"
 
+#include "eemd.h"
+#include <R_ext/Print.h>
 // If we are using OpenMP for parallel computation, we need locks to ensure
 // that the same output data is not written by several threads at the same
 // time.
@@ -47,7 +53,7 @@ inline static void release_lock(__attribute__((unused)) lock* l) {}
 
 // Helper functions for working with data arrays
 inline static void array_copy(double const* restrict src, size_t n, double* restrict dest) {
-  memcpy(dest, src, n*sizeof(double));
+	memcpy(dest, src, n*sizeof(double));
 }
 
 inline static void array_add(double const* src, size_t n, double* dest) {
@@ -58,6 +64,11 @@ inline static void array_add(double const* src, size_t n, double* dest) {
 inline static void array_add_to(double const* src1, double const* src2, size_t n, double* dest) {
 	for (size_t i=0; i<n; i++)
 		dest[i] = src1[i] + src2[i];
+}
+
+inline static void array_addmul_to(double const* src1, double const* src2, double val, size_t n, double* dest) {
+	for (size_t i=0; i<n; i++)
+		dest[i] = src1[i] + val*src2[i];
 }
 
 inline static void array_sub(double const* src, size_t n, double* dest) {
@@ -169,14 +180,17 @@ typedef struct {
 	emd_workspace* restrict emd_w;
 } eemd_workspace;
 
-eemd_workspace* allocate_eemd_workspace(size_t N, unsigned long int rng_seed) {
+eemd_workspace* allocate_eemd_workspace(size_t N) {
 	eemd_workspace* w = malloc(sizeof(eemd_workspace));
 	w->N = N;
 	w->r = gsl_rng_alloc(gsl_rng_mt19937);
-	gsl_rng_set(w->r, rng_seed);
 	w->x = malloc(N*sizeof(double));
 	w->emd_w = allocate_emd_workspace(N);
 	return w;
+}
+
+void set_rng_seed(eemd_workspace* w, unsigned long int rng_seed) {
+	gsl_rng_set(w->r, rng_seed);
 }
 
 void free_eemd_workspace(eemd_workspace* w) {
@@ -207,6 +221,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed) {
+	gsl_set_error_handler_off();
 	// Validate parameters
 	libeemd_error_code validation_result = _validate_eemd_parameters(ensemble_size, noise_strength, S_number, num_siftings);
 	if (validation_result != EMD_SUCCESS) {
@@ -259,7 +274,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 			}
 		}
 		// Each thread allocates its own workspace
-		ws[thread_id] = allocate_eemd_workspace(N, rng_seed+thread_id);
+		ws[thread_id] = allocate_eemd_workspace(N);
 		eemd_workspace* w = ws[thread_id];
 		// All threads share the same array of locks
 		w->emd_w->locks = locks;
@@ -276,6 +291,9 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 				array_copy(input, N, w->x);
 			}
 			else {
+				// set rng seed based on ensemble member to ensure
+				// reproducibility even in a multithreaded case
+				set_rng_seed(w, rng_seed+en_i);
 				for (size_t i=0; i<N; i++) {
 					w->x[i] = input[i] + gsl_ran_gaussian(w->r, noise_sigma);
 				}
@@ -317,6 +335,7 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed) {
+	gsl_set_error_handler_off();
 	// Validate parameters
 	libeemd_error_code validation_result = _validate_eemd_parameters(ensemble_size, noise_strength, S_number, num_siftings);
 	if (validation_result != EMD_SUCCESS) {
@@ -335,8 +354,6 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		M = emd_num_imfs(N);
 	}
 	const double one_per_ensemble_size = 1.0/ensemble_size;
-	// The noise standard deviation is noise_strength times the standard deviation of input data
-	const double noise_sigma = (noise_strength != 0)? gsl_stats_sd(input, 1, N)*noise_strength : 0;
 	// Initialize output data to zero
 	memset(output, 0x00, M*N*sizeof(double));
 	// Each thread gets a separate workspace if we are using OpenMP
@@ -376,14 +393,17 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 			ws = malloc(num_threads*sizeof(eemd_workspace*));
 		}
 		// Each thread allocates its own workspace
-		ws[thread_id] = allocate_eemd_workspace(N, rng_seed+thread_id);
+		ws[thread_id] = allocate_eemd_workspace(N);
 		eemd_workspace* w = ws[thread_id];
 		// Precompute and store white noise, since for each mode of the data we
 		// need the same mode of the corresponding realization of noise
 		#pragma omp for
 		for (size_t en_i=0; en_i<ensemble_size; en_i++) {
+			// set rng seed based on ensemble member to ensure
+			// reproducibility even in a multithreaded case
+			set_rng_seed(w, rng_seed+en_i);
 			for (size_t j=0; j<N; j++) {
-				noises[N*en_i+j] = gsl_ran_gaussian(w->r, noise_sigma);
+				noises[N*en_i+j] = gsl_ran_gaussian(w->r, 1.0);
 			}
 		}
 	} // Return to sequental mode
@@ -418,8 +438,13 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 				// this ensemble member
 				double* const noise = &noises[N*en_i];
 				double* const noise_residual = &noise_residuals[N*en_i];
-				// Initialize input signal as data + noise
-				array_add_to(res, noise, N, w->x);
+				// Initialize input signal as data + noise.
+				// The noise standard deviation is noise_strength times the
+				// standard deviation of input data divided by the standard
+				// deviation of the noise. This is used to fix the SNR at each
+				// stage.
+				const double noise_sigma = noise_strength*gsl_stats_sd(res, 1, N)/gsl_stats_sd(noise, 1, N);
+				array_addmul_to(res, noise, noise_sigma, N, w->x);
 				// Sift to extract first EMD mode
 				sift_err = _sift(w->x, w->emd_w->sift_w, S_number, num_siftings, &sift_counter);
 				#pragma omp flush(sift_err)
@@ -730,6 +755,7 @@ size_t emd_num_imfs(size_t N) {
 
 libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* restrict y,
 		size_t N, double* restrict spline_y, double* restrict spline_workspace) {
+	gsl_set_error_handler_off();
 	const size_t n = N-1;
 	const size_t max_j = (size_t)x[n];
 	if (N <= 1) {
@@ -750,7 +776,12 @@ libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* r
 	// Fall back to linear interpolation (for N==2) or polynomial interpolation
 	// (for N==3)
 	if (N <= 3) {
-		gsl_poly_dd_init(spline_workspace, x, y, N);
+		int gsl_status = gsl_poly_dd_init(spline_workspace, x, y, N);
+		if (gsl_status != GSL_SUCCESS) {
+			REprintf("Error reported by gsl_poly_dd_init: %s\n",
+				gsl_strerror(gsl_status));
+			return EMD_GSL_ERROR;
+		}
 		for (size_t j=0; j<=max_j; j++) {
 			spline_y[j] = gsl_poly_dd_eval(spline_workspace, x, N, j);
 		}
@@ -801,14 +832,14 @@ libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* r
 	gsl_vector_view subdiag_vec = gsl_vector_view_array(subdiag, n-2);
 	gsl_vector_view g_vec = gsl_vector_view_array(g, n-1);
 	gsl_vector_view solution_vec = gsl_vector_view_array(c+1, n-1);
-	const int status = gsl_linalg_solve_tridiag(&diag_vec.vector,
+	int gsl_status = gsl_linalg_solve_tridiag(&diag_vec.vector,
 			                                    &supdiag_vec.vector,
 												&subdiag_vec.vector,
 												&g_vec.vector,
 												&solution_vec.vector);
-	if (status) {
+	if (gsl_status != GSL_SUCCESS) {
 		REprintf("Error reported by gsl_linalg_solve_tridiag: %s\n",
-				gsl_strerror(status));
+				gsl_strerror(gsl_status));
 		return EMD_GSL_ERROR;
 	}
 	// Compute c[0] and c[n]
