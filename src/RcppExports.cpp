@@ -72,3 +72,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"Rlibeemd_ceemdanR", (DL_FUNC) &Rlibeemd_ceemdanR, 8},
+    {"Rlibeemd_eemdR", (DL_FUNC) &Rlibeemd_eemdR, 8},
+    {"Rlibeemd_emd_num_imfsR", (DL_FUNC) &Rlibeemd_emd_num_imfsR, 1},
+    {"Rlibeemd_extremaR", (DL_FUNC) &Rlibeemd_extremaR, 1},
+    {"Rlibeemd_gslErrorHandlerOff", (DL_FUNC) &Rlibeemd_gslErrorHandlerOff, 0},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_Rlibeemd(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

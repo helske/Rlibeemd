@@ -78,4 +78,3 @@ plot(ts.union("log(obs)" = log(UKgas), Seasonal = imfs[, 1],
 \seealso{
 \code{\link{eemd}}
 }
-

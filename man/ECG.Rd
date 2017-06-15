@@ -22,4 +22,3 @@ data(ECG)
 plot(ECG)
 }
 \keyword{datasets}
-

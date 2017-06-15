@@ -47,4 +47,3 @@ lines(ext$maxima[26:28, ],col = 4)
 "Introducing libeemd: A program package for performing the ensemble empirical mode decomposition", Computational Statistics (2015).}
 }
 }
-

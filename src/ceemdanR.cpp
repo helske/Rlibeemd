@@ -1,12 +1,9 @@
 #include <Rcpp.h>
-#ifndef restrict
-#define restrict // nothing
-#endif
+
 extern "C"
 {
   #include "eemd.h"
 }
-#include "extras.h"
 
 using namespace Rcpp;
 

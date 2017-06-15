@@ -1,0 +1,27 @@
+---
+title: "Updating Rlibeemd to new libeemd version"
+author: "Jouni Helske"
+date: "15 June 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preliminaries
+
+On Linux, libeemd needs obviously GSL, so 
+```{bash, eval = FALSE }
+sudo apt-get install libgsl2 libgsl-dev
+```
+
+# When libeemd changes, what needs to be done in Rlibeemd
+
+## libeemd, develop branch
+
+   - Instead of having single eemd.h file, now the functions are separated.
+   - This didn't seem to have big ramifications, just moved around definitions a bit between extras.h and eemd.h
+   
+   
+## libeemd, bemd branch

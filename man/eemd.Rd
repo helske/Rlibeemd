@@ -74,4 +74,3 @@ ts.plot(rowSums(imfs[, 4:ncol(imfs)]))
 \seealso{
 \code{\link{ceemdan}}
 }
-

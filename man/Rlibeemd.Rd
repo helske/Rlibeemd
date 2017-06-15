@@ -27,4 +27,3 @@ Package is based on the libeemd C library: \url{https://bitbucket.org/luukko/lib
   (2011) 4144--4147.}
   }
 }
-

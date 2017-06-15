@@ -1,9 +1,13 @@
-/* Copyright 2013 Perttu Luukko
+// Changes for Rlibeemd:
+// Include extras.h
+// move typedef for libeemd_error_code to extras.h
+// Removed unnecessary functions
+//   emd_report_if_error
+//   emd_report_to_file_if_error
 
- ** Modified for R compatibility by Jouni Helske:
- ** Removed unnecessary declarations for 
- **  emd_report_if_error
- **  emd_report_to_file_if_error
+#include "extras.h"
+
+/* Copyright 2013 Perttu Luukko
 
  * This file is part of libeemd.
 
@@ -34,43 +38,22 @@
 #endif
 #endif
 
-#include <assert.h>
-#include <limits.h>
-#include <string.h>
-#include <math.h>
-#include <stdbool.h>
-#include <gsl/gsl_statistics_double.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_poly.h>
+#include <stddef.h>
+#include <stdio.h>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+extern const char* libeemd_version;
 
-// Possible error codes returned by functions eemd, ceemdan and
-// emd_evaluate_spline
-typedef enum {
-  EMD_SUCCESS = 0,
-	// Errors from invalid parameters
-	EMD_INVALID_ENSEMBLE_SIZE = 1,
-	EMD_INVALID_NOISE_STRENGTH = 2,
-	EMD_NOISE_ADDED_TO_EMD = 3,
-	EMD_NO_NOISE_ADDED_TO_EEMD = 4,
-	EMD_NO_CONVERGENCE_POSSIBLE = 5,
-	EMD_NOT_ENOUGH_POINTS_FOR_SPLINE = 6,
-	EMD_INVALID_SPLINE_POINTS = 7,
-	// Other errors
-	EMD_GSL_ERROR = 8
-} libeemd_error_code;
+
+//*** Removed in Rlibeemd ***//
+// // Helper functions to print an error message if an error occured
+// void emd_report_if_error(libeemd_error_code err);
+// void emd_report_to_file_if_error(FILE* file, libeemd_error_code err);
 
 // Main EEMD decomposition routine as described in:
 //   Z. Wu and N. Huang,
 //   Ensemble Empirical Mode Decomposition: A Noise-Assisted Data Analysis
 //   Method, Advances in Adaptive Data Analysis,
-//   Vol. 1, No. 1 (2009) 1â€“41
+//   Vol. 1, No. 1 (2009) 1–41
 //
 // Parameters 'input' and 'N' denote the input data and its length,
 // respectively. Output from the routine is written to array 'output', which
@@ -86,6 +69,9 @@ typedef enum {
 // the sifting ends when either criterion is fulfilled. The final parameter is
 // the seed given to the random number generator. A value of zero denotes a
 // RNG-specific default value.
+//
+// To compute the original EMD decomposition you can use this function with
+// ensemble_size = 1 and noise_strength = 0.
 libeemd_error_code eemd(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int

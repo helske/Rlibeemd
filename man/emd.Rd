@@ -43,4 +43,3 @@ This is a wrapper around \code{eemd} with \code{ensemble_size = 1} and \code{noi
 \seealso{
 \code{\link{eemd}}, \code{\link{ceemdan}}
 }
-

@@ -1,7 +1,5 @@
 #include <Rcpp.h>
-#ifndef restrict
-#define restrict // nothing
-#endif
+
 extern "C"
 {
   #include "eemd.h"
