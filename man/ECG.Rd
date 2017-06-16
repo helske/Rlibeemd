@@ -18,7 +18,7 @@ Electrocardiogram Data
  first 2049 observations (0 to 16 seconds with sampling interval of 0.0078125 seconds)
 }
 \examples{
-data(ECG)
+data("ECG")
 plot(ECG)
 }
 \keyword{datasets}

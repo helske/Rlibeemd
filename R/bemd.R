@@ -55,6 +55,7 @@
 #' title(xlab = "Time (days)", main = "Bivariate EMD decomposition", outer = TRUE)
 #' 
 bemd <- function(input, directions = 64L, num_imfs = 0L, num_siftings = 50L) {
+  
   if (!all(is.finite(input))) 
     stop("'input' must contain finite values only.")
   if (num_imfs < 0)
@@ -63,7 +64,11 @@ bemd <- function(input, directions = 64L, num_imfs = 0L, num_siftings = 50L) {
     stop("Argument 'num_siftings' must be non-negative integer.")
   if (!all(is.finite(directions))) 
     stop("'input' must contain finite values only.")
+  if (!is.complex(input)) 
+    stop("Argument 'input' must be a complex vector. ")
+  
   if (length(directions) == 1) {
+    if(directions <= 0) stop("Argument 'directions' must be a numeric vector of positive integer. ")
     directions <- 2 * pi * 0:(directions - 1) / directions
   }
   output <- bemdR(input, directions,num_imfs, num_siftings)

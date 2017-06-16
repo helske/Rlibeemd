@@ -18,31 +18,16 @@ Float Data
  used as an example data in Rilling et al (2007).
 }
 \examples{
-data(float)
-plot(float, type = "l"))
+data("float")
+plot(float, type = "l")
+
 }
-\keyword{"Bivariate}
-\keyword{(2007)}
-\keyword{14}
-\keyword{936--939}}
-\keyword{@references}
-\keyword{Decomposition",}
-\keyword{Empirical}
-\keyword{Flandrin,}
-\keyword{Goncalves}
-\keyword{IEEE}
-\keyword{J.}
-\keyword{Letters,}
-\keyword{Lilly,}
-\keyword{M.}
-\keyword{Mode}
-\keyword{P.}
-\keyword{Processing}
-\keyword{Rilling,}
-\keyword{Signal}
-\keyword{Vol.}
-\keyword{\enumerate{}
-\keyword{\item{G.}
-\keyword{and}
+\references{
+\enumerate{
+      \item{G. Rilling, P. Flandrin, P. Goncalves and J. M. Lilly,
+  "Bivariate Empirical Mode Decomposition",
+  IEEE Signal Processing Letters, Vol. 14 (2007) 936--939}
+ 
+}
+}
 \keyword{datasets}
-\keyword{}}

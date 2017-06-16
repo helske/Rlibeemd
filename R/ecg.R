@@ -10,7 +10,7 @@
 #' @source MIT-BIH Normal Sinus Rhythm Database, PhysioBank ATM, \url{http://www.physionet.org/cgi-bin/atm/ATM}
 #' @keywords datasets
 #' @examples
-#' data(ECG)
+#' data("ECG")
 #' plot(ECG)
 NULL
 #'
@@ -24,13 +24,15 @@ NULL
 #' @format A time series object.
 #' @source  http://wfdac.whoi.edu
 #' @keywords datasets
-#'  @references
+#'@references
 #' \enumerate{
 #'       \item{G. Rilling, P. Flandrin, P. Goncalves and J. M. Lilly,
 #'   "Bivariate Empirical Mode Decomposition",
 #'   IEEE Signal Processing Letters, Vol. 14 (2007) 936--939}
-#'       }
+#'  
+#' }
 #' @examples
-#' data(float)
-#' plot(float, type = "l"))
+#' data("float")
+#' plot(float, type = "l")
+#' 
 NULL
