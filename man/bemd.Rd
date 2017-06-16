@@ -4,12 +4,13 @@
 \alias{bemd}
 \title{Bivariate EMD decomposition}
 \usage{
-bemd(input, directions, num_imfs = 0, num_siftings = 50L)
+bemd(input, directions = 64L, num_imfs = 0L, num_siftings = 50L)
 }
 \arguments{
 \item{input}{Complex vector of length N. The input signal to decompose.}
 
-\item{directions}{Vector of directions (phi_k in the article) used for decomposition.}
+\item{directions}{Vector of directional angles (in radians) to use for the decomposition, 
+or an integer defining the number of equally spaced angles to use.}
 
 \item{num_imfs}{Number of Intrinsic Mode Functions (IMFs) to compute. If num_imfs is set to zero, a value of
 num_imfs = emd_num_imfs(N) will be used, which corresponds to a maximal number of
@@ -40,10 +41,29 @@ input <- cos(0.3 * t) * exp(2i * t) + 0.3 * abs(sin(2.3 * t)) * exp(17i * t)
 # Use evenly spaced angles as directions
 num_directions <- 64
 directions <- 2 * pi * 1:num_directions / num_directions
-output <- bemd(input, directions, num_imfs = 4, num_siftings = 10)
+imfs <- bemd(input, directions, num_imfs = 4, num_siftings = 10)
+
+# plot the data
 plot(Re(input), Im(input), xlim = c(-1, 2))
+# plot signal and the imfs
 for(i in 1:4)
-  points(Re(out[,i]), Im(out[,i]), col = 1 + i)
+  points(Re(imfs[,i]), Im(imfs[,i]), col = 1 + i)
 legend("bottomright", col = 1:5, legend = c("signal", paste0("IMF ",1:4)), pch = 1)
+
+data("float")
+plot(float, type = "l")
+signal <- float[, 1] + float[, 2] * 1i
+imfs <- bemd(signal, num_siftings = 10, num_imfs = 4)
+
+# plot the data and the imfs
+oldpar <- par()
+par(mfrow = c(5, 1), mar = c(0.5, 4.5, 0.5, 0.5), oma = c(4, 0, 2, 0))
+ts.plot(float, col = 1:2, lty = 1:2, ylab = "signal", gpars = list(xaxt = "n"))
+for(i in 1:4) {
+  ts.plot(Re(imfs[, i]), Im(imfs[, i]), col = 1:2, lty = 1:2, 
+    ylab = if(i < 4) paste("IMF", i) else "residual", gpars = list(xaxt = "n"))
+ }
+axis(1)
+title(xlab = "Time (days)", main = "Bivariate EMD decomposition", outer = TRUE)
 
 }
