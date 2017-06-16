@@ -1,7 +1,8 @@
 language: r
 sudo: false
+cache: packages
 
-warnings_are_errors: false
+warnings_are_errors: true
 
 os:
   - linux
@@ -10,9 +11,11 @@ os:
 compiler:
   - gcc
   - clang
-  
-apt_packages: 
- - libgsl0-dev
+
+addons:
+  apt:
+    packages:
+      - libgsl0-dev
  
 r_github_packages:
  - jimhester/covr
