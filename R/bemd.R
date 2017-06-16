@@ -31,7 +31,7 @@
 #' output <- bemd(input, directions, num_imfs = 4, num_siftings = 10)
 #' plot(Re(input), Im(input), xlim = c(-1, 2))
 #' for(i in 1:4)
-#'   points(Re(out[,i]), Im(out[,i]), col = 1 + i)
+#'   points(Re(output[,i]), Im(output[,i]), col = 1 + i)
 #' legend("bottomright", col = 1:5, legend = c("signal", paste0("IMF ",1:4)), pch = 1)
 #' 
 bemd <- function(input, directions, num_imfs = 0, num_siftings = 50L) {
