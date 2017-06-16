@@ -143,5 +143,5 @@ size_t emd_num_imfs(size_t N) {
 	if (N <= 3) {
 		return 1;
 	}
-	return (size_t)(log2(N));
+	return (size_t)(log2((double)N));
 }

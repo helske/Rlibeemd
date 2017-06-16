@@ -4,6 +4,8 @@
 // Removed unnecessary functions
 //   emd_report_if_error
 //   emd_report_to_file_if_error
+// Moved bemd to bemd.h 
+// (otherwise gives weird errors likely due to differences of complex stuff in C/C++)
 
 #include "extras.h"
 
@@ -39,9 +41,11 @@
 #endif
 
 #include <stddef.h>
-#include <stdio.h>
-
-extern const char* libeemd_version;
+#include <complex.h>
+// No need for this in Rlibeemd
+//#include <stdio.h>
+// ditto
+// extern const char* libeemd_version;
 
 
 //*** Removed in Rlibeemd ***//

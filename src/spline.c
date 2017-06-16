@@ -48,7 +48,7 @@ libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* r
 			return EMD_GSL_ERROR;
 		}
 		for (size_t j=0; j<=max_j; j++) {
-			spline_y[j] = gsl_poly_dd_eval(spline_workspace, x, N, j);
+		  spline_y[j] = gsl_poly_dd_eval(spline_workspace, x, N, (double)j);
 		}
 		return EMD_SUCCESS;
 	}
@@ -120,7 +120,7 @@ libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* r
 			i++;
 			assert(i < n);
 		}
-		const double dx = j-x[i];
+		const double dx = (double)j-x[i];
 		if (dx == 0) {
 			spline_y[j] = y[i];
 			continue;

@@ -3,6 +3,14 @@ sudo: required
 
 warnings_are_errors: false
 
+os:
+  - linux
+  - osx
+  
+compiler:
+  - gcc
+  - clang
+  
 apt_packages: 
  - libgsl0-dev
  

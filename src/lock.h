@@ -25,18 +25,18 @@
 #ifdef _OPENMP
 #include <omp.h>
 typedef omp_lock_t lock;
-inline void init_lock(lock* l) { omp_init_lock(l); }
-inline void destroy_lock(lock* l) { omp_destroy_lock(l); }
-inline void get_lock(lock* l) { omp_set_lock(l); }
-inline void release_lock(lock* l) { omp_unset_lock(l); }
+static inline void init_lock(lock* l) { omp_init_lock(l); }
+static inline void destroy_lock(lock* l) { omp_destroy_lock(l); }
+static inline void get_lock(lock* l) { omp_set_lock(l); }
+static inline void release_lock(lock* l) { omp_unset_lock(l); }
 #else
 // If we don't use OpenMP, we provide a dummy lock that does nothing. This
 // avoids littering the code with too many #ifdefs for _OPENMP.
 typedef char lock;
-inline void init_lock(__attribute__((unused)) lock* l) {}
-inline void destroy_lock(__attribute__((unused)) lock* l) {}
-inline void get_lock(__attribute__((unused)) lock* l) {}
-inline void release_lock(__attribute__((unused)) lock* l) {}
+static inline void init_lock(__attribute__((unused)) lock* l) {}
+static inline void destroy_lock(__attribute__((unused)) lock* l) {}
+static inline void get_lock(__attribute__((unused)) lock* l) {}
+static inline void release_lock(__attribute__((unused)) lock* l) {}
 #endif
 
 #endif // _EEMD_LOCK_H_

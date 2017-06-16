@@ -47,7 +47,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 	// Don't start unnecessary threads if the ensemble is small
 	#ifdef _OPENMP
 	if (omp_get_num_threads() > (int)ensemble_size) {
-		omp_set_num_threads(ensemble_size);
+	  omp_set_num_threads((int)ensemble_size);
 	}
 	#endif
 	unsigned int ensemble_counter = 0;
@@ -56,15 +56,15 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 	#pragma omp parallel
 	{
 		#ifdef _OPENMP
-		const int num_threads = omp_get_num_threads();
-		const int thread_id = omp_get_thread_num();
+	  const size_t num_threads = (size_t)omp_get_num_threads();
+	  const size_t thread_id = (size_t)omp_get_thread_num();
 		#if EEMD_DEBUG >= 1
 		#pragma omp single
 		REprintf("Using %d thread(s) with OpenMP.\n", num_threads);
 		#endif
 		#else
-		const int num_threads = 1;
-		const int thread_id = 0;
+		const size_t num_threads = 1;
+		const size_t thread_id = 0;
 		#endif
 		#pragma omp single
 		{

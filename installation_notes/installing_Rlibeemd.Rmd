@@ -1,0 +1,67 @@
+---
+title: "Installation notes for libeemd/Rlibeemd"
+author: "Jouni Helske"
+date: "15 June 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+You can install `Rlibeemd` directly from CRAN. As `libeemd` requires Gnu Scientific Library (`GSL`), we need to install that first if we don't already have it in our system. This isn't a problem on Linux, but can be problematic in Windows environment. Luckily CRAN has binary versions of the package, so installing those makes things simple. These notes provide instructions for installing `Rlibeemd` and/or `libeemd` itself from the sources.
+
+# Linux
+
+On Linux, we first install `GSL` (if not already present). For example in Ubuntu:
+```{bash, eval = FALSE }
+sudo apt-get install libgsl2 libgsl-dev
+```
+
+And then you can just use `install.packages("Rlibeemd_*.tar.gz", repos = NULL)` in R (with `*` replaced with the relevant version number). For installing `libeemd`, you can follow the installation instructions in `libeemd` repository: https://bitbucket.org/luukko/libeemd.
+
+# Windows
+
+Again, we first need to install `GSL`. Unfortunately this is not as straightforward as in Linux. But there are at least two possibities. First one is to install Cygwin: www.cygwin.com. Download and run the setup file (currenly called `setup-x86_64.exe`), and click Next couple times and when the installation wizard asks to select packages to install, search everything containing `GSL`, and choose to install all of those. I'm not sure if you actually need all of them, but that should at least work. 
+
+Now if you want to install `libeemd`, search and select also `make` (make: The GNU version of the 'make' utility), and `gcc-core`. You can also search for `git` (git: Distributed version control system) which allows you to clone the `libeemd` repository to your computer. Or, you can skip that and just download the repo from bitbucket (on the left-hand side menu there should a link Download). 
+
+Finally, couple clicks on Next, and the downloading and installation starts.
+
+After the installation is finished, start Cygwin terminal and type
+```{bash, eval = FALSE}
+gsl-config
+```
+
+You should see an output like this:
+
+```{verbatim, eval = FALSE}
+Usage: gsl-config [OPTION]
+
+Known values for OPTION are:
+
+  --prefix		show GSL installation prefix 
+  --libs		print library linking information, with cblas
+  --libs-without-cblas	print library linking information, without cblas
+  --cflags		print pre-processor and compiler flags
+  --help		display this help and exit
+  --version		output version information
+
+An external CBLAS library can be specified using the GSL_CBLAS_LIB
+environment variable. The GSL CBLAS library is used by default.
+```
+
+Next, for the installation of `libeemd`, either use `git` to clone the repo:
+```{bash, eval = FALSE}
+git clone git@bitbucket.org:luukko/libeemd.git
+```
+
+Or download and extract the repo as zip file from the bitbucket. Either way, go to the top-level directory of `libeemd` and run
+```{bash, eval = FALSE}
+make
+make install
+```
+
+

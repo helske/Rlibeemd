@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// bemdR
+ComplexMatrix bemdR(ComplexVector input, NumericVector directions, double num_imfs, unsigned int num_siftings);
+RcppExport SEXP Rlibeemd_bemdR(SEXP inputSEXP, SEXP directionsSEXP, SEXP num_imfsSEXP, SEXP num_siftingsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< ComplexVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type directions(directionsSEXP);
+    Rcpp::traits::input_parameter< double >::type num_imfs(num_imfsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type num_siftings(num_siftingsSEXP);
+    rcpp_result_gen = Rcpp::wrap(bemdR(input, directions, num_imfs, num_siftings));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ceemdanR
 NumericMatrix ceemdanR(NumericVector input, double num_imfs, unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 RcppExport SEXP Rlibeemd_ceemdanR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
@@ -74,6 +88,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"Rlibeemd_bemdR", (DL_FUNC) &Rlibeemd_bemdR, 4},
     {"Rlibeemd_ceemdanR", (DL_FUNC) &Rlibeemd_ceemdanR, 8},
     {"Rlibeemd_eemdR", (DL_FUNC) &Rlibeemd_eemdR, 8},
     {"Rlibeemd_emd_num_imfsR", (DL_FUNC) &Rlibeemd_emd_num_imfsR, 1},

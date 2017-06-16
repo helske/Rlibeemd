@@ -58,23 +58,23 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 	// Don't start unnecessary threads if the ensemble is small
 	#ifdef _OPENMP
 	if (omp_get_num_threads() > (int)ensemble_size) {
-		omp_set_num_threads(ensemble_size);
+	  omp_set_num_threads((int)ensemble_size);
 	}
 	#endif
-	int num_threads;
+	size_t num_threads;
 	// The following section is executed in parallel
 	#pragma omp parallel
 	{
 		#ifdef _OPENMP
-		num_threads = omp_get_num_threads();
-		const int thread_id = omp_get_thread_num();
+	  num_threads = (size_t)omp_get_num_threads();
+	  const size_t thread_id = (size_t)omp_get_thread_num();
 		#if EEMD_DEBUG >= 1
 		#pragma omp single
 		REprintf("Using %d thread(s) with OpenMP.\n", num_threads);
 		#endif
 		#else
 		num_threads = 1;
-		const int thread_id = 0;
+		const size_t thread_id = 0;
 		#endif
 		#pragma omp single
 		{
@@ -167,7 +167,7 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 	array_add(res, N, output+N*(M-1));
 	release_lock(output_lock);
 	// Free global resources
-	for (int thread_id=0; thread_id<num_threads; thread_id++) {
+	for (size_t thread_id=0; thread_id<num_threads; thread_id++) {
 		free_eemd_workspace(ws[thread_id]);
 	}
 	free(ws); ws = NULL;
