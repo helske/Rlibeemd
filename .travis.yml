@@ -4,18 +4,34 @@ cache: packages
 
 warnings_are_errors: true
 
-compiler: clang
-
-addons:
-  apt:
-    packages:
-      - libgsl0-dev
+matrix:
+  include:
+    - os: linux
+      language: r
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+          - libgsl0-dev
+      r_binary_packages:
+        covr
+      after_success:
+        - Rscript -e 'library(covr);codecov()'
+      env: TRAVIS_LANG=R     
+    
+    - os: linux
+      language: r
+      compiler: clang
+      addons:
+        apt:
+          packages:
+          - libgsl0-dev
+      r_binary_packages:
+        covr
+      after_success:
+        - Rscript -e 'library(covr);codecov()'
+      env: TRAVIS_LANG=R     
  
-r_github_packages:
- - jimhester/covr
- 
-after_success:
- - Rscript -e 'library(covr);codecov()'
  
 r_check_args: "--as-cran"
 
