@@ -1,5 +1,5 @@
 ---
-title: "Installation notes for libeemd/Rlibeemd"
+title: "Installation of libeemd/Rlibeemd"
 author: "Jouni Helske"
 date: "15 June 2017"
 output: html_document
@@ -11,7 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-You can install `Rlibeemd` directly from CRAN. As `libeemd` requires Gnu Scientific Library (`GSL`), we need to install that first if we don't already have it in our system. This isn't a problem on Linux, but can be problematic in Windows environment. Luckily CRAN has binary versions of the package, so installing those makes things simple. These notes provide instructions for installing `Rlibeemd` and/or `libeemd` itself from the sources.
+Installing `Rlibeemd` is straightforward. For Windows and OSX systems you can install the binary package from CRAN in usual way. For source packages, the `libeemd` requires Gnu Scientific Library (`GSL`), so we need to install that first if we don't already have it in our system. Luckily that is straighforward in Linux (see below). 
+
+These notes provide detailed instructions for installing `libeemd` itself especially on Windows environment. Similar steps are also needed if you want to install `Rlibeemd` for source on Windows environment.
 
 # Linux
 
@@ -24,13 +26,34 @@ And then you can just use `install.packages("Rlibeemd_*.tar.gz", repos = NULL)` 
 
 # Windows
 
-Again, we first need to install `GSL`. Unfortunately this is not as straightforward as in Linux. But there are at least two possibities. First one is to install Cygwin: www.cygwin.com. Download and run the setup file (currenly called `setup-x86_64.exe`), and click Next couple times and when the installation wizard asks to select packages to install, search everything containing `GSL`, and choose to install all of those. I'm not sure if you actually need all of them, but that should at least work. 
+Again, we first need to install `GSL`. Unfortunately this is not as straightforward as in Linux. I will first describe the couple shortcuts, and the describe the typical approach.
 
-Now if you want to install `libeemd`, search and select also `make` (make: The GNU version of the 'make' utility), and `gcc-core`. You can also search for `git` (git: Distributed version control system) which allows you to clone the `libeemd` repository to your computer. Or, you can skip that and just download the repo from bitbucket (on the left-hand side menu there should a link Download). 
 
-Finally, couple clicks on Next, and the downloading and installation starts.
+First, install MSYS2: www.msys2.org. Follow the instructions on the website to install the MSYS2 and update the core packages with pacman. I addition, install tar, make and mingw-toolchain:
+```{r bash, eval = FALSE}
+pacman -S tar make mingw-w64-x86_64-toolchain
+```
 
-After the installation is finished, start Cygwin terminal and type
+Then, go to some suitable directory and download GSL:
+```{r bash, eval = FALSE}
+wget ftp://ftp.gnu.org/gnu/gsl/gsl-latest.tar.gz
+```
+
+And unpack:
+```{r bash, eval = FALSE}
+tar zxvf gsl-latest.tar.gz
+```
+
+Go to the new directory (the actual name depends on the GSL version) and install GSL:
+```{r bash, eval = FALSE}
+cd gsl-2.3
+./configure
+make
+make install
+```
+
+
+After the installation is finished, type
 ```{bash, eval = FALSE}
 gsl-config
 ```
@@ -53,15 +76,12 @@ An external CBLAS library can be specified using the GSL_CBLAS_LIB
 environment variable. The GSL CBLAS library is used by default.
 ```
 
-Next, for the installation of `libeemd`, either use `git` to clone the repo:
-```{bash, eval = FALSE}
-git clone git@bitbucket.org:luukko/libeemd.git
-```
 
-Or download and extract the repo as zip file from the bitbucket. Either way, go to the top-level directory of `libeemd` and run
+Download the libeemd repo from bitbucket (on the left-hand side menu there should a link Download). Or you can use clone the repository with git (after installing git with `pacman -S git`).  Either way, go to the top-level directory of `libeemd` and run
 ```{bash, eval = FALSE}
 make
 make install
 ```
 
+But examples don't work?
 
