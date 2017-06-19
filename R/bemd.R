@@ -53,7 +53,7 @@
 #'  }
 #' axis(1)
 #' title(xlab = "Time (days)", main = "Bivariate EMD decomposition", outer = TRUE)
-#' 
+#' par(oldpar)
 bemd <- function(input, directions = 64L, num_imfs = 0L, num_siftings = 50L) {
   
   if (!all(is.finite(input))) 
