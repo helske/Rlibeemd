@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Installing `Rlibeemd` is straightforward. For Windows and OSX systems you can install the binary package from CRAN in usual way. For source packages, the `libeemd` requires Gnu Scientific Library (`GSL`), so we need to install that first if we don't already have it in our system. Luckily that is straighforward in Linux (see below). 
 
-These notes provide detailed instructions for installing `libeemd` itself especially on Windows environment. Similar steps are also needed if you want to install `Rlibeemd` for source on Windows environment.
+These notes provide detailed instructions for installing `libeemd` itself especially on Windows environment. Note that if want to install `Rlibeemd` from source on Windows environment, you can also download the appropriate GSL files from here: https://www.stats.ox.ac.uk/pub/Rtools/libs.html, and then you need to add environmental variable `LIB_GSL=<path/to/gsl>`.
 
 # Linux
 
@@ -26,7 +26,7 @@ And then you can just use `install.packages("Rlibeemd_*.tar.gz", repos = NULL)` 
 
 # Windows
 
-Again, we first need to install `GSL`. Unfortunately this is not as straightforward as in Linux. I will first describe the couple shortcuts, and the describe the typical approach.
+Again, we first need to install `GSL`. Unfortunately this is not as straightforward as in Linux (except maybe in Windows 10 using Linux bash?).
 
 
 First, install MSYS2: www.msys2.org. Follow the instructions on the website to install the MSYS2 and update the core packages with pacman. I addition, install tar, make and mingw-toolchain:
@@ -76,12 +76,12 @@ An external CBLAS library can be specified using the GSL_CBLAS_LIB
 environment variable. The GSL CBLAS library is used by default.
 ```
 
-
 Download the libeemd repo from bitbucket (on the left-hand side menu there should a link Download). Or you can use clone the repository with git (after installing git with `pacman -S git`).  Either way, go to the top-level directory of `libeemd` and run
 ```{bash, eval = FALSE}
 make
 make install
 ```
 
-But examples don't work?
+I am not a Python user so I am not sure what you need to do then?
+
 
