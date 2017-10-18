@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // bemdR
 ComplexMatrix bemdR(ComplexVector input, NumericVector directions, double num_imfs, unsigned int num_siftings);
-RcppExport SEXP Rlibeemd_bemdR(SEXP inputSEXP, SEXP directionsSEXP, SEXP num_imfsSEXP, SEXP num_siftingsSEXP) {
+RcppExport SEXP _Rlibeemd_bemdR(SEXP inputSEXP, SEXP directionsSEXP, SEXP num_imfsSEXP, SEXP num_siftingsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +21,7 @@ END_RCPP
 }
 // ceemdanR
 NumericMatrix ceemdanR(NumericVector input, double num_imfs, unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
-RcppExport SEXP Rlibeemd_ceemdanR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
+RcppExport SEXP _Rlibeemd_ceemdanR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,7 +39,7 @@ END_RCPP
 }
 // eemdR
 NumericMatrix eemdR(NumericVector input, double num_imfs, unsigned int ensemble_size, double noise_strength, unsigned int S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
-RcppExport SEXP Rlibeemd_eemdR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
+RcppExport SEXP _Rlibeemd_eemdR(SEXP inputSEXP, SEXP num_imfsSEXP, SEXP ensemble_sizeSEXP, SEXP noise_strengthSEXP, SEXP S_numberSEXP, SEXP num_siftingsSEXP, SEXP rng_seedSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -57,7 +57,7 @@ END_RCPP
 }
 // emd_num_imfsR
 int emd_num_imfsR(double N);
-RcppExport SEXP Rlibeemd_emd_num_imfsR(SEXP NSEXP) {
+RcppExport SEXP _Rlibeemd_emd_num_imfsR(SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -68,7 +68,7 @@ END_RCPP
 }
 // extremaR
 List extremaR(NumericVector x);
-RcppExport SEXP Rlibeemd_extremaR(SEXP xSEXP) {
+RcppExport SEXP _Rlibeemd_extremaR(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -79,7 +79,7 @@ END_RCPP
 }
 // gslErrorHandlerOff
 void gslErrorHandlerOff();
-RcppExport SEXP Rlibeemd_gslErrorHandlerOff() {
+RcppExport SEXP _Rlibeemd_gslErrorHandlerOff() {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     gslErrorHandlerOff();
@@ -88,12 +88,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"Rlibeemd_bemdR", (DL_FUNC) &Rlibeemd_bemdR, 4},
-    {"Rlibeemd_ceemdanR", (DL_FUNC) &Rlibeemd_ceemdanR, 8},
-    {"Rlibeemd_eemdR", (DL_FUNC) &Rlibeemd_eemdR, 8},
-    {"Rlibeemd_emd_num_imfsR", (DL_FUNC) &Rlibeemd_emd_num_imfsR, 1},
-    {"Rlibeemd_extremaR", (DL_FUNC) &Rlibeemd_extremaR, 1},
-    {"Rlibeemd_gslErrorHandlerOff", (DL_FUNC) &Rlibeemd_gslErrorHandlerOff, 0},
+    {"_Rlibeemd_bemdR", (DL_FUNC) &_Rlibeemd_bemdR, 4},
+    {"_Rlibeemd_ceemdanR", (DL_FUNC) &_Rlibeemd_ceemdanR, 8},
+    {"_Rlibeemd_eemdR", (DL_FUNC) &_Rlibeemd_eemdR, 8},
+    {"_Rlibeemd_emd_num_imfsR", (DL_FUNC) &_Rlibeemd_emd_num_imfsR, 1},
+    {"_Rlibeemd_extremaR", (DL_FUNC) &_Rlibeemd_extremaR, 1},
+    {"_Rlibeemd_gslErrorHandlerOff", (DL_FUNC) &_Rlibeemd_gslErrorHandlerOff, 0},
     {NULL, NULL, 0}
 };
 

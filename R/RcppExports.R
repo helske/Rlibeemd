@@ -2,26 +2,26 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 bemdR <- function(input, directions, num_imfs = 0, num_siftings = 50L) {
-    .Call('Rlibeemd_bemdR', PACKAGE = 'Rlibeemd', input, directions, num_imfs, num_siftings)
+    .Call('_Rlibeemd_bemdR', PACKAGE = 'Rlibeemd', input, directions, num_imfs, num_siftings)
 }
 
 ceemdanR <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L, threads = 0L) {
-    .Call('Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads)
+    .Call('_Rlibeemd_ceemdanR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads)
 }
 
 eemdR <- function(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2, S_number = 4L, num_siftings = 50L, rng_seed = 0L, threads = 0L) {
-    .Call('Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads)
+    .Call('_Rlibeemd_eemdR', PACKAGE = 'Rlibeemd', input, num_imfs, ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads)
 }
 
 emd_num_imfsR <- function(N) {
-    .Call('Rlibeemd_emd_num_imfsR', PACKAGE = 'Rlibeemd', N)
+    .Call('_Rlibeemd_emd_num_imfsR', PACKAGE = 'Rlibeemd', N)
 }
 
 extremaR <- function(x) {
-    .Call('Rlibeemd_extremaR', PACKAGE = 'Rlibeemd', x)
+    .Call('_Rlibeemd_extremaR', PACKAGE = 'Rlibeemd', x)
 }
 
 gslErrorHandlerOff <- function() {
-    invisible(.Call('Rlibeemd_gslErrorHandlerOff', PACKAGE = 'Rlibeemd'))
+    invisible(.Call('_Rlibeemd_gslErrorHandlerOff', PACKAGE = 'Rlibeemd'))
 }
 

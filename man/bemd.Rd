@@ -65,5 +65,5 @@ for(i in 1:4) {
  }
 axis(1)
 title(xlab = "Time (days)", main = "Bivariate EMD decomposition", outer = TRUE)
-
+par(oldpar)
 }
