@@ -7,6 +7,8 @@
 
 An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd) for ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN). These methods decompose possibly nonlinear and/or nonstationary time series data into a finite amount of components (called IMFs, insintric mode functions) separated by instantaneous frequencies. This decomposition provides a powerful method to look into the different processes behind a given time series, and provides a way to separate short time-scale events from a general trend.
 
+If you use Rlibeemd/libeemd for scientific work please cite [*Luukko, P.J.J., Helske, J., Räsänen, E., Comput. Stat. **31**, 545 (2016)*](https://dx.doi.org/10.1007/s00180-015-0603-9) ([also on arXiv](https://arxiv.org/abs/1707.00487)). This article also describes in detail what libeemd actually computes. You should definitely read it if you are unsure about what EMD, EEMD and CEEMDAN are.
+ 
 ### Example ###
 Here a CEEMDAN decomposition is performed for the UK gas consumption series (length n = 108). 
 By default, `ceemdan` extracts [log_2(n)] components, so here we get five IMFs and the residual.

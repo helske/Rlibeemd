@@ -42,6 +42,7 @@
 
 #include <stddef.h>
 #include <complex.h>
+#include <stdbool.h>
 // No need for this in Rlibeemd
 //#include <stdio.h>
 // ditto
@@ -96,13 +97,11 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 // A method for finding the local minima and maxima from input data specified
 // with parameters x and N. The memory for storing the coordinates of the
 // extrema and their number are passed as the rest of the parameters. The
-// arrays for the coordinates must be at least size N. The method also counts
-// the number of zero crossings in the data, and saves the results into the
-// pointer given as num_zero_crossings_ptr.
-void emd_find_extrema(double const* restrict x, size_t N,
+// arrays for the coordinates must be at least size N. The method also checks whether
+// found minima are negative and maxima are positive, and returns this as boolean value.
+bool emd_find_extrema(double const* restrict x, size_t N,
 		double* restrict maxx, double* restrict maxy, size_t* num_max_ptr,
-		double* restrict minx, double* restrict miny, size_t* num_min_ptr,
-		size_t* num_zero_crossings_ptr);
+		double* restrict minx, double* restrict miny, size_t* num_min_ptr);
 
 // Return the number of IMFs that can be extracted from input data of length N,
 // including the final residual.

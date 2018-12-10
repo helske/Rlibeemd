@@ -25,6 +25,8 @@ switch (err) {
 			stop("Spline evaluation points invalid");
 		case EMD_GSL_ERROR :
 			stop("Error reported by GSL library");
+    case EMD_NO_CONVERGENCE_IN_SIFTING :
+      stop("Convergence not reached after sifting 10000 times");
 		default :
 			stop("Error code with unknown meaning. Please file a bug!");
 	}

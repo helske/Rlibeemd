@@ -18,17 +18,15 @@
 
 #include "extrema.h"
 
-void emd_find_extrema(double const* restrict x, size_t N,
+bool emd_find_extrema(double const* restrict x, size_t N,
   double* restrict maxx, double* restrict maxy, size_t* nmax,
-  double* restrict minx, double* restrict miny, size_t* nmin,
-  size_t* nzc) {
-  // Set the number of extrema and zero crossings to zero initially
+  double* restrict minx, double* restrict miny, size_t* nmin) {
+  // Set the number of extrema to zero initially
   *nmax = 0;
   *nmin = 0;
-  *nzc = 0;
   // Handle empty array as a special case
   if (N == 0) {
-    return;
+    return true;
   }
   // Add the ends of the data as both local minima and maxima. These
   // might be changed later by linear extrapolation.
@@ -40,17 +38,16 @@ void emd_find_extrema(double const* restrict x, size_t N,
   (*nmin)++;
   // If we had only one data point this is it
   if (N == 1) {
-    return;
+    return true;
   }
   // Now starts the main extrema-finding loop. The loop detects points where
   // the slope of the data changes sign. In the case of flat regions at the
   // extrema, the center point of the flat region will be considered the
   // extremal point. While detecting extrema, the loop also counts the number
   // of zero crossings that occur.
+  bool all_extrema_good = true;
   enum slope { UP, DOWN, NONE };
-  enum sign { POS, NEG, ZERO };
   enum slope previous_slope = NONE;
-  enum sign previous_sign = (x[0] < -0)? NEG : ((x[0] > 0)? POS : ZERO);
   int flat_counter = 0;
   for (size_t i=0; i<N-1; i++) {
     if (x[i+1] > x[i]) { // Going up
@@ -59,32 +56,23 @@ void emd_find_extrema(double const* restrict x, size_t N,
         minx[*nmin] = (double)(i)-(double)(flat_counter)/2;
         miny[*nmin] = x[i];
         (*nmin)++;
-      }
-      if (previous_sign == NEG && x[i+1] > 0) { // zero crossing from neg to pos
-        (*nzc)++;
-        previous_sign = POS;
-      }
-      else if (previous_sign == ZERO && x[i+1] > 0) {
-        // this needs to be handled as an unfortunate special case
-        previous_sign = POS;
+        if (x[i] >= 0) { // minima need to be negative
+          all_extrema_good = false;
+        }
       }
       previous_slope = UP;
       flat_counter = 0;
     }
+    
     else if (x[i+1] < x[i]) { // Going down
       if (previous_slope == UP) {
         // Was going up before -> local maximum found
         maxx[*nmax] = (double)(i)-(double)(flat_counter)/2;
         maxy[*nmax] = x[i];
         (*nmax)++;
-      }
-      if (previous_sign == POS && x[i+1] < -0) { // zero crossing from pos to neg
-        (*nzc)++;
-        previous_sign = NEG;
-      }
-      else if (previous_sign == ZERO && x[i+1] < -0) {
-        // this needs to be handled as an unfortunate special case
-        previous_sign = NEG;
+        if (x[i] <= 0) { // maxima need to be positive
+          all_extrema_good = false;
+        }
       }
       previous_slope = DOWN;
       flat_counter = 0;
@@ -125,7 +113,7 @@ void emd_find_extrema(double const* restrict x, size_t N,
     if (min_er < miny[*nmin-1])
       miny[*nmin-1] = min_er;
   }
-  return;
+  return all_extrema_good;
 }
 
 void emd_find_maxima(double const* restrict x, size_t N, double* restrict maxx, double* restrict maxy, size_t* nmax) {

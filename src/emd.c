@@ -31,39 +31,31 @@ libeemd_error_code _sift(double* restrict input, sifting_workspace*
 	// and the S number
 	*sift_counter = 0;
 	unsigned int S_counter = 0;
-	// Numbers of extrema and zero crossings are initialized to dummy values
+	// Numbers of extrema are initialized to dummy values
 	size_t num_max = (size_t)(-1);
 	size_t num_min = (size_t)(-1);
-	size_t num_zc = (size_t)(-1);
 	size_t prev_num_max = (size_t)(-1);
 	size_t prev_num_min = (size_t)(-1);
-	size_t prev_num_zc = (size_t)(-1);
+	bool all_extrema_good = false;
 	while (num_siftings == 0 || *sift_counter < num_siftings) {
 		(*sift_counter)++;
-		#if EEMD_DEBUG >= 1
-		if (*sift_counter == 10000) {
-		  REprintf("Something is probably wrong. Sift counter has reached 10000.\n");
-		}
-		#endif
+	  if (*sift_counter >= 10000) {
+	    return EMD_NO_CONVERGENCE_IN_SIFTING;
+	  }
 		prev_num_max = num_max;
 		prev_num_min = num_min;
-		prev_num_zc = num_zc;
-		// Find extrema and count zero crossings
-		emd_find_extrema(input, N, maxx, maxy, &num_max, minx, miny, &num_min, &num_zc);
+		// Find extrema
+		all_extrema_good = emd_find_extrema(input, N, maxx, maxy, &num_max, minx, miny, &num_min);
 		// Check if we are finished based on the S-number criteria
 		if (S_number != 0) {
-			const int max_diff = (int)num_max - (int)prev_num_max;
-			const int min_diff = (int)num_min - (int)prev_num_min;
-			const int zc_diff = (int)num_zc - (int)prev_num_zc;
-			if (abs(max_diff)+abs(min_diff)+abs(zc_diff) <= 1) {
+		  const int min_diff = abs((int)num_min-(int)prev_num_min);
+		  const int max_diff = abs((int)num_max-(int)prev_num_max);
+		  if ((min_diff + max_diff) <= 1) {
 				S_counter++;
 				if (S_counter >= S_number) {
-					const int num_diff = (int)num_min + (int)num_max - 4 - (int)num_zc;
-					if (abs(num_diff) <= 1) {
+				  if (all_extrema_good) {
 						// Number of extrema has been stable for S_number steps
-						// and the number of *interior* extrema and zero
-						// crossings differ by at most one -- we are converged
-						// according to the S-number criterion
+						// and the extrema have correct signs -- we are converged
 						break;
 					}
 				}
