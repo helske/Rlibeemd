@@ -1,7 +1,7 @@
 ## This assumes that the LIB_GSL variable points to working GSL libraries
 PKG_CPPFLAGS=-I$(LIB_GSL)/include -I../inst/include
-PKG_LIBS="-L$(LIB_GSL)/lib/$(R_ARCH)" -lgsl -lgslcblas $(SHLIB_OPENMP_CFLAGS) $(SHLIB_OPENMP_CXXFLAGS)
-PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS="-L$(LIB_GSL)/lib/$(R_ARCH)" -lgsl -lgslcblas $(SHLIB_OPENMP_CFLAGS) #$(SHLIB_OPENMP_CXXFLAGS)
+#PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS)
 PKG_CFLAGS=$(SHLIB_OPENMP_CFLAGS)
 
 
