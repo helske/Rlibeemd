@@ -34,7 +34,7 @@ test_that("different seeds give different results",{
 
 test_that("identical seeds give equal results",{
   x <- rnorm(64)
-  expect_identical(ceemdan(x, rng_seed = 1, threads = 1), 
+  expect_equal(ceemdan(x, rng_seed = 1, threads = 1), 
                    ceemdan(x, rng_seed = 1, threads = 1))
 })
 
