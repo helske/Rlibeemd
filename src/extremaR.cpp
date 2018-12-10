@@ -16,8 +16,7 @@ List extremaR(NumericVector x){
   NumericVector miny(x.size());
   size_t nmax;
   size_t nmin;
-  size_t zerocrossings;
-  emd_find_extrema(x.begin(), N, maxx.begin(), maxy.begin(), &nmax, minx.begin(), miny.begin(), &nmin,  &zerocrossings);
+  emd_find_extrema(x.begin(), N, maxx.begin(), maxy.begin(), &nmax, minx.begin(), miny.begin(), &nmin);
   
   return List::create(Named("x_max") = head(maxx,nmax),Named("y_max") = head(maxy,nmax),
   Named("x_min") = head(minx,nmin), Named("y_min") = head(miny,nmin));
