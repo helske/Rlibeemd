@@ -57,17 +57,3 @@ legend("topleft", c("Observations", "Residual", "Last IMF + residual", "Trend fr
 
 The IMF_5 + residual is quite close to the trend obtained by structural time series model of `StructTS`.
 
-
-### Installing libeemd ###
-
-Package is available at [CRAN](http://cran.r-project.org/web/packages/Rlibeemd/index.html).
-
-If you want to compile Rlibeemd from source, you will also need GNU Scientific Library.
-
-You can also install the latest development version from the github using the devtools package:
-
-```R
-install.packages("devtools")
-library(devtools)
-install_github("helske/Rlibeemd")
-```
