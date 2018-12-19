@@ -12,7 +12,7 @@ Description: An R interface for libeemd (Luukko, Helske, Räsänen, 2016) <doi:1
     a C library of highly efficient parallelizable functions  for performing the ensemble empirical mode decomposition (EEMD), 
     its complete variant (CEEMDAN), the regular empirical mode decomposition (EMD), and bivariate EMD (BEMD). 
     Due to the possible portability issues CRAN version no longer supports OpenMP, you can install OpenMP-supported version 
-    from Github: https://github.com/helske/Rlibeemd/.
+    from Github: <https://github.com/helske/Rlibeemd/>.
 License: GPL-3
 NeedsCompilation: yes
 SystemRequirements: GNU GSL
