@@ -80,7 +80,7 @@
 libeemd_error_code eemd(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
-		S_number, unsigned int num_siftings, unsigned long int rng_seed);
+		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 
 // A complete variant of EEMD as described in:
 //   M. Torres et al,
@@ -92,7 +92,7 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
-		S_number, unsigned int num_siftings, unsigned long int rng_seed);
+		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 
 // A method for finding the local minima and maxima from input data specified
 // with parameters x and N. The memory for storing the coordinates of the

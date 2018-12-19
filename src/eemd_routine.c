@@ -22,7 +22,7 @@
 libeemd_error_code eemd(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
-		S_number, unsigned int num_siftings, unsigned long int rng_seed) {
+		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads) {
 	gsl_set_error_handler_off();
 	// Validate parameters
 	libeemd_error_code validation_result = validate_eemd_parameters(ensemble_size, noise_strength, S_number, num_siftings);
@@ -38,6 +38,8 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 	}
 	// The noise standard deviation is noise_strength times the standard deviation of input data
 	const double noise_sigma = (noise_strength != 0)? gsl_stats_sd(input, 1, N)*noise_strength : 0;
+	
+
 	// Initialize output data to zero
 	memset(output, 0x00, M*N*sizeof(double));
 	// Each thread gets a separate workspace if we are using OpenMP
@@ -46,6 +48,11 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 	lock** locks;
 	// Don't start unnecessary threads if the ensemble is small
 	#ifdef _OPENMP
+	int old_maxthreads = 1;
+	if (threads>0) {
+	  old_maxthreads = omp_get_max_threads();
+	  omp_set_num_threads(threads);    
+	}
 	if (omp_get_num_threads() > (int)ensemble_size) {
 	  omp_set_num_threads((int)ensemble_size);
 	}
@@ -129,5 +136,10 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 		const double one_per_ensemble_size = 1.0/ensemble_size;
 		array_mult(output, N*M, one_per_ensemble_size);
 	}
+  #ifdef _OPENMP
+	if (threads>0) {
+	  omp_set_num_threads(old_maxthreads);    
+	}
+  #endif
 	return EMD_SUCCESS;
 }

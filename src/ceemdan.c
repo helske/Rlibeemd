@@ -22,7 +22,7 @@
 libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		double* restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
-		S_number, unsigned int num_siftings, unsigned long int rng_seed) {
+		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads) {
 	gsl_set_error_handler_off();
 	// Validate parameters
 	libeemd_error_code validation_result = validate_eemd_parameters(ensemble_size, noise_strength, S_number, num_siftings);
@@ -57,6 +57,11 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 	double* noise_residuals = malloc(ensemble_size*N*sizeof(double));
 	// Don't start unnecessary threads if the ensemble is small
 	#ifdef _OPENMP
+	int old_maxthreads = 1;
+	if (threads>0) {
+	  old_maxthreads = omp_get_max_threads();
+	  omp_set_num_threads(threads);    
+	}
 	if (omp_get_num_threads() > (int)ensemble_size) {
 	  omp_set_num_threads((int)ensemble_size);
 	}
@@ -176,5 +181,11 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 	free(noises); noises = NULL;
 	destroy_lock(output_lock);
 	free(output_lock); output_lock = NULL;
+	
+#ifdef _OPENMP
+	if (threads>0) {
+	  omp_set_num_threads(old_maxthreads);    
+	}
+#endif
 	return EMD_SUCCESS;
 }

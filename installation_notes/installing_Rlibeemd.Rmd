@@ -1,7 +1,7 @@
 ---
-title: "Installation of libeemd/Rlibeemd"
+title: "Installation of Rlibeemd"
 author: "Jouni Helske"
-date: "15 June 2017"
+date: "19 December 2018"
 output: html_document
 ---
 
@@ -13,75 +13,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Installing `Rlibeemd` is straightforward. For Windows and OSX systems you can install the binary package from CRAN in usual way. For source packages, the `libeemd` requires Gnu Scientific Library (`GSL`), so we need to install that first if we don't already have it in our system. Luckily that is straighforward in Linux (see below). 
 
-These notes provide detailed instructions for installing `libeemd` itself especially on Windows environment. Note that if want to install `Rlibeemd` from source on Windows environment, you can also download the appropriate GSL files from here: https://www.stats.ox.ac.uk/pub/Rtools/libs.html, and then you need to add environmental variable `LIB_GSL=<path/to/gsl>`.
+These notes provide detailed instructions for installing `libeemd` itself especially on Windows environment. Note that if want to install `Rlibeemd` from source on Windows environment, you can also 
 
-# Linux
+# Linux (and OS X?)
 
 On Linux, we first install `GSL` (if not already present). For example in Ubuntu:
 ```{bash, eval = FALSE }
 sudo apt-get install libgsl2 libgsl-dev
 ```
 
-And then you can just use `install.packages("Rlibeemd_*.tar.gz", repos = NULL)` in R (with `*` replaced with the relevant version number). For installing `libeemd`, you can follow the installation instructions in `libeemd` repository: https://bitbucket.org/luukko/libeemd.
+And then you can just use `install.packages("Rlibeemd")` in R elevant version number). Or, more preferably use the OpenMP-supported version from GitHub: `devtools::install_github("helske/Rlibeemd")`.
 
 # Windows
 
-Again, we first need to install `GSL`. Unfortunately this is not as straightforward as in Linux (except maybe in Windows 10 using Linux bash?).
-
-
-First, install MSYS2: www.msys2.org. Follow the instructions on the website to install the MSYS2 and update the core packages with pacman. I addition, install tar, make and mingw-toolchain:
-```{r bash, eval = FALSE}
-pacman -S tar make mingw-w64-x86_64-toolchain
-```
-
-Then, go to some suitable directory and download GSL:
-```{r bash, eval = FALSE}
-wget ftp://ftp.gnu.org/gnu/gsl/gsl-latest.tar.gz
-```
-
-And unpack:
-```{r bash, eval = FALSE}
-tar zxvf gsl-latest.tar.gz
-```
-
-Go to the new directory (the actual name depends on the GSL version) and install GSL:
-```{r bash, eval = FALSE}
-cd gsl-2.3
-./configure
-make
-make install
-```
-
-
-After the installation is finished, type
-```{bash, eval = FALSE}
-gsl-config
-```
-
-You should see an output like this:
-
-```{verbatim, eval = FALSE}
-Usage: gsl-config [OPTION]
-
-Known values for OPTION are:
-
-  --prefix		show GSL installation prefix 
-  --libs		print library linking information, with cblas
-  --libs-without-cblas	print library linking information, without cblas
-  --cflags		print pre-processor and compiler flags
-  --help		display this help and exit
-  --version		output version information
-
-An external CBLAS library can be specified using the GSL_CBLAS_LIB
-environment variable. The GSL CBLAS library is used by default.
-```
-
-Download the libeemd repo from bitbucket (on the left-hand side menu there should a link Download). Or you can use clone the repository with git (after installing git with `pacman -S git`).  Either way, go to the top-level directory of `libeemd` and run
-```{bash, eval = FALSE}
-make
-make install
-```
-
-I am not a Python user so I am not sure what you need to do then?
+Again, we first need to install `GSL`. Download the appropriate GSL files from here: https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/ (file `local323.zip` or equivalent), and then you need to add environmental variable `LIB_GSL=<path/to/gsl>`. And proceed as in Linux case.
 
 

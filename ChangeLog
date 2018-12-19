@@ -1,13 +1,13 @@
 Changes from version 1.3.8 to 1.4.1:
+  * CRAN no longer allows mixing C++ and C flags for OpenMP. Therefore the CRAN version no longer supports OpenMP. 
+    You can download the OpenMP-supported version from Github https://github.com/helske/Rlibeemd.
   * S-number criterion is now more robust by explicitly checking the
 	  signs of minima and maxima. This partially undoes the changes done
 	  for version 1.3 of libeemd.
 	* Bivariate EMD is now supported, see function bemd.
-  * Fixed OpenMP compliler portability issues.
   * Functions fail properly in case sifting doesn't seem to converge.
   
-
 Changes from version 1.3.7 to 1.3.8:
-  * Updated to libeemd 1.4, see libeemd's changelog: https://bitbucket.org/luukko/libeemd
+  * Updated to libeemd 1.4, see libeemd's changelog: "https://bitbucket.org/luukko/libeemd
 Changes from version 1.3.6 to 1.3.7:
   * Changed testthat tests due to changes in testthat package.
