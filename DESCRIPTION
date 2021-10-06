@@ -24,4 +24,4 @@ Suggests:
 LinkingTo: Rcpp
 Encoding: UTF-8
 BugReports: https://github.com/helske/Rlibeemd/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.2
