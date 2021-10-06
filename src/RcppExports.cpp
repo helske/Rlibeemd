@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // bemdR
 ComplexMatrix bemdR(ComplexVector input, NumericVector directions, double num_imfs, unsigned int num_siftings);
 RcppExport SEXP _Rlibeemd_bemdR(SEXP inputSEXP, SEXP directionsSEXP, SEXP num_imfsSEXP, SEXP num_siftingsSEXP) {

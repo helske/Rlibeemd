@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/helske/Rlibeemd.png?branch=master)](https://travis-ci.org/helske/Rlibeemd)
+[![R-CMD-check](https://github.com/helske/Rlibeemd/workflows/R-CMD-check/badge.svg)](https://github.com/helske/Rlibeemd/actions)
 [![codecov.io](http://codecov.io/github/helske/Rlibeemd/coverage.svg?branch=master)](http://codecov.io/github/helske/Rlibeemd?branch=master)
 [![downloads](http://cranlogs.r-pkg.org/badges/Rlibeemd)](http://cranlogs.r-pkg.org/badges/Rlibeemd)
 [![cran version](http://www.r-pkg.org/badges/version/Rlibeemd)](http://cran.r-project.org/package=Rlibeemd)

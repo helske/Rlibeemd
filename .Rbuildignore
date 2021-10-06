@@ -7,3 +7,4 @@
 ^config\.status$
 ^src/Makevars$
 installation_notes
+^\.github$
