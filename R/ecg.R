@@ -7,7 +7,8 @@
 #' @name ECG  
 #' @docType data
 #' @format A time series object.
-#' @source MIT-BIH Normal Sinus Rhythm Database, PhysioBank ATM, \url{http://www.physionet.org/cgi-bin/atm/ATM}
+#' @source MIT-BIH Normal Sinus Rhythm Database, PhysioBank ATM, 
+#' \url{https://archive.physionet.org/cgi-bin/atm/ATM}
 #' @keywords datasets
 #' @examples
 #' data("ECG")

@@ -11,7 +11,8 @@
 A time series object.
 }
 \source{
-MIT-BIH Normal Sinus Rhythm Database, PhysioBank ATM, \url{http://www.physionet.org/cgi-bin/atm/ATM}
+MIT-BIH Normal Sinus Rhythm Database, PhysioBank ATM, 
+\url{https://archive.physionet.org/cgi-bin/atm/ATM}
 }
 \description{
 Electrocardiogram Data
