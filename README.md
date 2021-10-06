@@ -18,7 +18,11 @@ devtools::install_github("helske/Rlibeemd")
 ```
 
 Note that this installs the package from source, so you need to have GSL installed. For Linux, use something like `sudo apt-get install libgsl2 libgsl-dev`, whereas in Windows you can download GSL files from here:
-https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/ (file `local323.zip` or equivalent). You also need to add environmental variable `LIB_GSL=<path/to/gsl>`. For windows, binaries are also available which is probably easier option.
+https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/ (file `local323.zip` or equivalent). You also need to add environmental variable `LIB_GSL=<path/to/gsl>`. For Windows, binaries are also available (see the latest release) which is probably easier option:
+
+```
+install.packages("https://github.com/helske/Rlibeemd/releases/download/v1.4.2/Rlibeemd_1.4.2.zip", repos = NULL)
+```
 
 Please file an issue if you encounter portability issues (so far none found), or if you figure out a way to enable OpenMP in CRAN version without CRAN checks complaining.
 
