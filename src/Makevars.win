@@ -1,9 +1,4 @@
-# Per CRAN policies it is not portable to use both SHLIB_OPENMP_CFLAGS and SHLIB_OPENMP_CXXFLAGS.
-# Therefore the CRAN version does not use OpenMP at all anymore, but the github version does.
-# Please file an issue if you encounter portability issues (so far none found).
-
 ## This assumes that the LIB_GSL variable points to working GSL libraries
 PKG_CPPFLAGS=-I$(LIB_GSL)/include -I../inst/include
-PKG_LIBS="-L$(LIB_GSL)/lib/$(R_ARCH)" -lgsl -lgslcblas $(SHLIB_OPENMP_CFLAGS) $(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS="-L$(LIB_GSL)/lib/$(R_ARCH)" -lgsl -lgslcblas $(SHLIB_OPENMP_CFLAGS)
 PKG_CFLAGS=$(SHLIB_OPENMP_CFLAGS)
-PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS)
