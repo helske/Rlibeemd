@@ -4,8 +4,16 @@
 \alias{eemd}
 \title{EEMD Decomposition}
 \usage{
-eemd(input, num_imfs = 0, ensemble_size = 250L, noise_strength = 0.2,
-  S_number = 4L, num_siftings = 50L, rng_seed = 0L, threads = 0L)
+eemd(
+  input,
+  num_imfs = 0,
+  ensemble_size = 250L,
+  noise_strength = 0.2,
+  S_number = 4L,
+  num_siftings = 50L,
+  rng_seed = 0L,
+  threads = 0L
+)
 }
 \arguments{
 \item{input}{Vector of length N. The input signal to decompose.}

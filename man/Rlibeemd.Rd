@@ -3,7 +3,6 @@
 \docType{package}
 \name{Rlibeemd}
 \alias{Rlibeemd}
-\alias{Rlibeemd-package}
 \title{Rlibeemd: Ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN)}
 \description{
 Package Rlibeemd contains functions for the ensemble empirical mode decomposition (EEMD), 

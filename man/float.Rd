@@ -7,7 +7,9 @@
  
  The data are a position record from an acoustically tracked subsurface oceanographic float, 
  used as an example data in Rilling et al (2007).}
-\format{A time series object.}
+\format{
+A time series object.
+}
 \source{
 http://wfdac.whoi.edu
 }
