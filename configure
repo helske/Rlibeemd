@@ -1720,7 +1720,8 @@ $as_echo "no" >&6; }
 fi
 
 
-## If gsl-config was found, let's use it
+
+## If gsl-config was found, use it
 if test "${GSL_CONFIG}" != ""; then
     # Use gsl-config for header and linker arguments (without BLAS which we get from R)
     GSL_CFLAGS=`${GSL_CONFIG} --cflags`
@@ -1729,7 +1730,7 @@ else
     as_fn_error $? "gsl-config not found, is GSL installed?" "$LINENO" 5
 fi
 
-# Now substitute these variables in src/Makevars.in to create src/Makevars
+# Substitute these variables in src/Makevars.in used to create src/Makevars
 
 
 
