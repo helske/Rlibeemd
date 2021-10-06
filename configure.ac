@@ -5,7 +5,7 @@
 ## Copied from RcppGSL's (Francois & Eddelbuettel) example package
 
 # The version set here will propagate to other files from here
-AC_INIT([Rlibeemd], 1.3.8)
+AC_INIT([Rlibeemd],[1.4.2])
 
 ## Use gsl-config to find arguments for compiler and linker flags
 ##
@@ -24,4 +24,5 @@ fi
 AC_SUBST(GSL_CFLAGS)
 AC_SUBST(GSL_LIBS)
 
-AC_OUTPUT(src/Makevars)
+AC_CONFIG_FILES([src/Makevars])
+AC_OUTPUT

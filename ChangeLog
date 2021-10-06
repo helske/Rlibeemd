@@ -1,6 +1,15 @@
+Changes from version 1.4.1-1 to 1.4.2:
+  * Updateed configure script as requested by CRAN.
+  
+Changes from version 1.4.1 to 1.4.1-1:
+  * Changed citation information.
+  
 Changes from version 1.3.8 to 1.4.1:
-  * CRAN no longer allows mixing C++ and C flags for OpenMP. Therefore the CRAN version no longer supports OpenMP. 
-    You can download the OpenMP-supported version from Github https://github.com/helske/Rlibeemd.
+  * CRAN no longer allows mixing C++ and C flags for OpenMP. 
+    Therefore the CRAN version no longer supports OpenMP. 
+    You can download the OpenMP-supported version from Github 
+    https://github.com/helske/Rlibeemd or install it directly with 
+    devtools::install_github("helske/Rlibeemd") (needs devtools package).
   * S-number criterion is now more robust by explicitly checking the
 	  signs of minima and maxima. This partially undoes the changes done
 	  for version 1.3 of libeemd.

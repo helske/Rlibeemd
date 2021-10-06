@@ -11,7 +11,7 @@ If you use Rlibeemd/libeemd for scientific work please cite [*Luukko, P.J.J., He
  
 # OpenMP support
 
-By CRAN policies it is not portable to use both `SHLIB_OPENMP_CFLAGS` and `SHLIB_OPENMP_CXXFLAGS`. Therefore the CRAN version does not use OpenMP at all anymore (OpenMP flags have beend removed from `Makevars`), but the the version on GitHub version does. So if you want to use parallel version of the `Rlibeemd`, please install the package via
+By CRAN policies it is not portable to use both `SHLIB_OPENMP_CFLAGS` and `SHLIB_OPENMP_CXXFLAGS`. Therefore the CRAN version does not use OpenMP at all anymore (OpenMP flags have been removed from `Makevars`), but the the version on GitHub version does. So if you want to use parallel version of the `Rlibeemd`, please install the package via
 
 ```
 devtools::install_github("helske/Rlibeemd")
@@ -24,6 +24,7 @@ Please file an issue if you encounter portability issues (so far none found), or
 
 
 ### Example ###
+
 Here a CEEMDAN decomposition is performed for the UK gas consumption series (length n = 108). 
 By default, `ceemdan` extracts [log_2(n)] components, so here we get five IMFs and the residual.
 
