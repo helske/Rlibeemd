@@ -9,16 +9,16 @@ An R interface for [libeemd C library](https://bitbucket.org/luukko/libeemd) for
 
 If you use Rlibeemd/libeemd for scientific work please cite [*Luukko, P.J.J., Helske, J., Räsänen, E., Comput. Stat. **31**, 545 (2016)*](https://dx.doi.org/10.1007/s00180-015-0603-9) ([also on arXiv](https://arxiv.org/abs/1707.00487)). This article also describes in detail what libeemd actually computes. You should definitely read it if you are unsure about what EMD, EEMD and CEEMDAN are.
  
-# OpenMP support
+# OpenMP parallel computing support
 
-By CRAN policies it is not portable to use both `SHLIB_OPENMP_CFLAGS` and `SHLIB_OPENMP_CXXFLAGS`. Therefore the CRAN version does not use OpenMP at all anymore (OpenMP flags have been removed from `Makevars`), but the the version on GitHub version does. So if you want to use parallel version of the `Rlibeemd`, please install the package via
+Current CRAN policies do not allow the use of `SHLIB_OPENMP_CFLAGS` combined with linking with C++. Therefore the CRAN version does not use OpenMP at all anymore (OpenMP flags have been removed from `Makevars`), but the the version on GitHub version does. So if you want to use parallel version of the `Rlibeemd`, please install the package via
 
 ```
 devtools::install_github("helske/Rlibeemd")
 ```
 
 Note that this installs the package from source, so you need to have GSL installed. For Linux, use something like `sudo apt-get install libgsl2 libgsl-dev`, whereas in Windows you can download GSL files from here:
-https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/ (file `local323.zip` or equivalent). You also need to add environmental variable `LIB_GSL=<path/to/gsl>`. 
+https://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/ (file `local323.zip` or equivalent). You also need to add environmental variable `LIB_GSL=<path/to/gsl>`. For windows, binaries are also available which is probably easier option.
 
 Please file an issue if you encounter portability issues (so far none found), or if you figure out a way to enable OpenMP in CRAN version without CRAN checks complaining.
 
