@@ -40,7 +40,7 @@
 #' 
 extrema <- function(input) {  
   output <- extremaR(input)
-   if (inherits(input, "ts")) {
+   if (inherits(input, c("ts","xts"))) {
      output$x_max <- time(input)[output$x_max + 1]
      output$x_min <- time(input)[output$x_min + 1]
    }
