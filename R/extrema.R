@@ -4,6 +4,8 @@
 #' artificial extrema added to the ends of the data as specified in the
 #' original EEMD article [1]. In the case of flat regions at the extrema, the center point of the flat region 
 #' will be considered the extremal point [2].
+#'
+#' Added support for xts objects, Chuck Coleman, December 3, 2021.
 #' 
 #' @export
 #' @name extrema
