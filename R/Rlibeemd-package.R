@@ -20,7 +20,7 @@
 #'   }
 #' @docType package
 #' @name Rlibeemd
-#' @aliases Rlibeemd
+#' @aliases Rlibeemd Rlibeemd-package
 #' @useDynLib Rlibeemd
 #' @import Rcpp
 #' @importFrom stats time tsp "tsp<-"

@@ -3,7 +3,7 @@
   github_note <- paste0(
     "If you installed Rlibeemd from CRAN, consider installing again from ",
     "GitHub if you wish to support for parallel computations. ",
-    "See https://github.com/helske/Rlibeemd for details or use",
+    "See https://github.com/helske/Rlibeemd for details or use ",
     "devtools::install_github('helske/Rlibeemd')")
   
   citation_note <- paste0("\nPlease cite Rlibeemd in publications by using: \n",

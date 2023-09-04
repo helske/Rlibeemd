@@ -2,8 +2,7 @@ Package: Rlibeemd
 Type: Package
 Title: Ensemble Empirical Mode Decomposition (EEMD) and Its Complete
     Variant (CEEMDAN)
-Version: 1.4.2
-Date: 2021-10-06
+Version: 1.4.3
 Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
     comment = c("R interface", ORCID = "0000-0001-7130-793X"), email = "jouni.helske@iki.fi"), 
     person(given = "Perttu", family = "Luukko", role = "aut", comment = c("Original libeemd C
@@ -24,4 +23,4 @@ Suggests:
 LinkingTo: Rcpp
 Encoding: UTF-8
 BugReports: https://github.com/helske/Rlibeemd/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
