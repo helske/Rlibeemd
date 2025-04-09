@@ -38,10 +38,14 @@ jobs:
 
       # Install GSL and dependencies per OS
       - name: Install dependencies for ${{ matrix.config.os }}
+        shell: bash
         run: |
           if [[ ${{ matrix.config.os }} == 'macOS-latest' ]]; then
-            # macOS: Install GSL with Homebrew
             brew install gsl
+            # Ensure gsl-config is available
+            export PATH="/usr/local/opt/gsl/bin:$PATH"
+            export GSL_CFLAGS="-I/usr/local/opt/gsl/include"
+            export GSL_LIBS="-L/usr/local/opt/gsl/lib -lgsl -lgslcblas"
           elif [[ ${{ matrix.config.os }} == 'ubuntu-latest' ]]; then
             # Ubuntu: Install GSL with apt
             sudo apt-get update
@@ -55,8 +59,8 @@ jobs:
             # Add GSL to PATH
             echo "Adding GSL to PATH"
             setx PATH "%PATH%;C:\msys64\mingw64\bin"
-            # Install RTools on Windows
-            choco install rtools
+            export GSL_CFLAGS="-IC:/msys64/mingw64/include"
+            export GSL_LIBS="-LC:/msys64/mingw64/lib -lgsl -lgslcblas"
           fi
           
       - uses: r-lib/actions/setup-r-dependencies@v2

@@ -1,7 +1,7 @@
 [![R-CMD-check](https://github.com/helske/Rlibeemd/workflows/R-CMD-check/badge.svg)](https://github.com/helske/Rlibeemd/actions)
-[![codecov.io](http://codecov.io/github/helske/Rlibeemd/coverage.svg?branch=master)](http://codecov.io/github/helske/Rlibeemd?branch=master)
-[![downloads](http://cranlogs.r-pkg.org/badges/Rlibeemd)](http://cranlogs.r-pkg.org/badges/Rlibeemd)
-[![cran version](http://www.r-pkg.org/badges/version/Rlibeemd)](http://cran.r-project.org/package=Rlibeemd)
+[![codecov.io](https://app.codecov.io/github/helske/Rlibeemd/coverage.svg?branch=main)](https://app.codecov.io/github/helske/Rlibeemd?branch=main)
+[![downloads](https://cranlogs.r-pkg.org:443/badges/Rlibeemd](https://cranlogs.r-pkg.org:443/badges/Rlibeemd)
+[![cran version](https://www.r-pkg.org/badges/version/Rlibeemd)](https://CRAN.R-project.org/package=Rlibeemd)
 
 # Rlibeemd #
 
