@@ -18,9 +18,9 @@
 
 #include "extrema.h"
 
-bool emd_find_extrema(double const* restrict x, size_t N,
-  double* restrict maxx, double* restrict maxy, size_t* nmax,
-  double* restrict minx, double* restrict miny, size_t* nmin) {
+bool emd_find_extrema(double const* __restrict x, size_t N,
+  double* __restrict maxx, double* __restrict maxy, size_t* nmax,
+  double* __restrict minx, double* __restrict miny, size_t* nmin) {
   // Set the number of extrema to zero initially
   *nmax = 0;
   *nmin = 0;
@@ -116,7 +116,7 @@ bool emd_find_extrema(double const* restrict x, size_t N,
   return all_extrema_good;
 }
 
-void emd_find_maxima(double const* restrict x, size_t N, double* restrict maxx, double* restrict maxy, size_t* nmax) {
+void emd_find_maxima(double const* __restrict x, size_t N, double* __restrict maxx, double* __restrict maxy, size_t* nmax) {
   // Set the number of maxima to zero initially
   *nmax = 0;
   // Handle empty array as a special case

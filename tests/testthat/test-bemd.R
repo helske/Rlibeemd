@@ -19,7 +19,7 @@ test_that("output of BEMD is of correct size and form",{
   expect_identical(class(imfs), c("mts", "ts", "matrix"))
   expect_identical(mode(imfs), "complex")
   x <- ts(x, start = 2000, frequency = 12)
-  imfs <- emd(x, num_imfs = 3)
+  imfs <- bemd(x, num_imfs = 3)
   expect_identical(tsp(imfs), tsp(x))
 })
 

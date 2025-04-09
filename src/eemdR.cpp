@@ -20,7 +20,7 @@ unsigned long int rng_seed=0, int threads=0){
   } else {
     M = (size_t)num_imfs;
   }
-  NumericMatrix output(N,M);
+  NumericMatrix output(static_cast<int>(N), static_cast<int>(M));
   libeemd_error_code err = eemd(input.begin(), N, output.begin(), M, 
     ensemble_size, noise_strength, S_number, num_siftings, rng_seed, threads);
   

@@ -14,10 +14,6 @@
 
 #include <R_ext/Print.h>
 
-#ifndef restrict
-#define restrict // nothing
-#endif
-
 #ifdef _OPENMP
 #include <omp.h>
 #endif

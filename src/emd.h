@@ -37,15 +37,15 @@
 // Helper function for applying the sifting procedure to input until it is
 // reduced to an IMF according to the stopping criteria given by S_number and
 // num_siftings. The required number of siftings is saved to sift_counter.
-libeemd_error_code _sift(double* restrict input, sifting_workspace*
-		restrict w, unsigned int S_number, unsigned int num_siftings,
+libeemd_error_code _sift(double* __restrict input, sifting_workspace*
+		__restrict w, unsigned int S_number, unsigned int num_siftings,
 		unsigned int* sift_counter);
 
 // Helper function for extracting all IMFs from input using the sifting
 // procedure defined by _sift. The contents of the input array are destroyed in
 // the process.
-libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w,
-		double* restrict output, size_t M,
+libeemd_error_code _emd(double* __restrict input, emd_workspace* __restrict w,
+		double* __restrict output, size_t M,
 		unsigned int S_number, unsigned int num_siftings);
 
 #endif // _EEMD_EMD_H_

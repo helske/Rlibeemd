@@ -8,6 +8,6 @@ extern "C"
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-int emd_num_imfsR(double N) {
-return emd_num_imfs((size_t)N);
+int emd_num_imfsR(unsigned int N) {
+  return emd_num_imfs(N);
 }

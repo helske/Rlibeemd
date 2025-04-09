@@ -1,10 +1,8 @@
-^README.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^.*\.png$
 ^config\.log$
 ^config\.status$
 ^src/Makevars$
-installation_notes
 ^\.github$
+^.gitignore$

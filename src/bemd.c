@@ -43,10 +43,11 @@ void free_bemd_sifting_workspace(bemd_sifting_workspace* w) {
   free(w); w = NULL;
 }
 
-
-static libeemd_error_code _bemd_sift_once(double complex* restrict x, size_t N, double const* restrict directions, size_t num_directions, bemd_sifting_workspace* w) {
+// double complex* __restrict x -> Rcomplex* x
+static libeemd_error_code _bemd_sift_once(Rcomplex* x, size_t N, double const* __restrict directions, size_t num_directions, bemd_sifting_workspace* w) {
   libeemd_error_code errcode = EMD_SUCCESS;
-  double complex* restrict m = calloc(N, sizeof(double complex));
+  //double complex* __restrict m = calloc(N, sizeof(double complex));
+  Rcomplex* m = calloc(N, sizeof(Rcomplex));
   double* const px = w->projected_signal;
   // TODO: handle different directions in parallel
   for (size_t direction_i=0; direction_i<num_directions; direction_i++) {
@@ -55,8 +56,10 @@ static libeemd_error_code _bemd_sift_once(double complex* restrict x, size_t N, 
     const double cos_phi = cos(phi);
     // Project signal
     for (size_t i=0; i<N; i++) {
-      const double a = creal(x[i]);
-      const double b = cimag(x[i]);
+      // const double a = creal(x[i]);
+      // const double b = cimag(x[i]);
+      const double a = x[i].r; // Rcomplex
+      const double b = x[i].i;
       px[i] = a*cos_phi + b*sin_phi;
     }
     // Find maxima
@@ -68,7 +71,13 @@ static libeemd_error_code _bemd_sift_once(double complex* restrict x, size_t N, 
     }
     // Add to m
     for (size_t i=0; i<N; i++) {
-      m[i] += cexp(phi*I) * (w->maxspline)[i];
+      //m[i] += cexp(phi*I) * (w->maxspline)[i];
+      // Rcomplex
+      double amp = w->maxspline[i];
+      double re_exp = cos(phi);
+      double im_exp = sin(phi);
+      m[i].r += amp * re_exp;
+      m[i].i += amp * im_exp;
     }
   }
   // Scale m
@@ -80,10 +89,11 @@ static libeemd_error_code _bemd_sift_once(double complex* restrict x, size_t N, 
   return errcode;
 }
 
-
-libeemd_error_code bemd(double _Complex const* restrict input, size_t N,
-  double const* restrict directions, size_t num_directions,
-  double _Complex* restrict output, size_t M,
+//double _Complex const* __restrict input -> Rcomplex* input
+//double _Complex* __restrict output -> const Rcomplex* output
+libeemd_error_code bemd(const Rcomplex* input, size_t N,
+  double const* __restrict directions, size_t num_directions,
+  Rcomplex* output, size_t M,
   unsigned int num_siftings) {
   gsl_set_error_handler_off();
   if (M == 0) {
@@ -91,9 +101,11 @@ libeemd_error_code bemd(double _Complex const* restrict input, size_t N,
   }
   libeemd_error_code bemd_err = EMD_SUCCESS;
   // Create a read-write copy of input data
-  double complex* const x = malloc(N*sizeof(double complex));
+  //double complex* const x = malloc(N*sizeof(double complex));
+  Rcomplex* const x = malloc(N*sizeof(Rcomplex));
   complex_array_copy(input, N, x);
-  double complex* const res = malloc(N*sizeof(double complex));
+  //double complex* const res = malloc(N*sizeof(double complex));
+  Rcomplex* const res = malloc(N*sizeof(Rcomplex));
   // For the first iteration, the residual is the original input data
   complex_array_copy(input, N, res);
   bemd_sifting_workspace* w = allocate_bemd_sifting_workspace(N, NULL);

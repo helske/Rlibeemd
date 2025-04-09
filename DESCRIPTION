@@ -2,7 +2,7 @@ Package: Rlibeemd
 Type: Package
 Title: Ensemble Empirical Mode Decomposition (EEMD) and Its Complete
     Variant (CEEMDAN)
-Version: 1.4.3
+Version: 1.4.4
 Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
     comment = c("R interface", ORCID = "0000-0001-7130-793X"), email = "jouni.helske@iki.fi"), 
     person(given = "Perttu", family = "Luukko", role = "aut", comment = c("Original libeemd C
@@ -10,7 +10,7 @@ Authors@R: c(person(given = "Jouni", family = "Helske", role = c("aut","cre"),
 Description: An R interface for libeemd (Luukko, Helske, Räsänen, 2016) <doi:10.1007/s00180-015-0603-9>, 
     a C library of highly efficient parallelizable functions  for performing the ensemble empirical mode decomposition (EEMD), 
     its complete variant (CEEMDAN), the regular empirical mode decomposition (EMD), and bivariate EMD (BEMD). 
-    Due to the possible portability issues CRAN version no longer supports OpenMP, you can install OpenMP-supported version 
+    Due to the possible portability issues CRAN version no longer supports OpenMP, but you can install OpenMP-supported version 
     from GitHub: <https://github.com/helske/Rlibeemd/>.
 License: GPL-3
 NeedsCompilation: yes
@@ -23,4 +23,4 @@ Suggests:
 LinkingTo: Rcpp
 Encoding: UTF-8
 BugReports: https://github.com/helske/Rlibeemd/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

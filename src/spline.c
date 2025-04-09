@@ -18,8 +18,8 @@
 
 #include "spline.h"
 
-libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* restrict y,
-		size_t N, double* restrict spline_y, double* restrict spline_workspace) {
+libeemd_error_code emd_evaluate_spline(double const* __restrict x, double const* __restrict y,
+		size_t N, double* __restrict spline_y, double* __restrict spline_workspace) {
 	gsl_set_error_handler_off();
 	const size_t n = N-1;
 	const size_t max_j = (size_t)x[n];

@@ -18,8 +18,8 @@
 
 #include "emd.h"
 
-libeemd_error_code _sift(double* restrict input, sifting_workspace*
-		restrict w, unsigned int S_number, unsigned int num_siftings,
+libeemd_error_code _sift(double* __restrict input, sifting_workspace*
+		__restrict w, unsigned int S_number, unsigned int num_siftings,
 		unsigned int* sift_counter) {
 	const size_t N = w->N;
 	// Provide some shorthands to avoid excessive '->' operators
@@ -81,8 +81,8 @@ libeemd_error_code _sift(double* restrict input, sifting_workspace*
 	return EMD_SUCCESS;
 }
 
-libeemd_error_code _emd(double* restrict input, emd_workspace* restrict w,
-		double* restrict output, size_t M,
+libeemd_error_code _emd(double* __restrict input, emd_workspace* __restrict w,
+		double* __restrict output, size_t M,
 		unsigned int S_number, unsigned int num_siftings) {
 	// Provide some shorthands to avoid excessive '->' operators
 	const size_t N = w->N;
