@@ -36,6 +36,29 @@ jobs:
         with:
           use-public-rspm: true
 
+      # Install GSL and dependencies per OS
+      - name: Install dependencies for ${{ matrix.config.os }}
+        run: |
+          if [[ ${{ matrix.config.os }} == 'macOS-latest' ]]; then
+            # macOS: Install GSL with Homebrew
+            brew install gsl
+          elif [[ ${{ matrix.config.os }} == 'ubuntu-latest' ]]; then
+            # Ubuntu: Install GSL with apt
+            sudo apt-get update
+            sudo apt-get install -y libgsl-dev
+          elif [[ ${{ matrix.config.os }} == 'windows-latest' ]]; then
+            # Windows: Install GSL with MSYS2
+            choco install msys2
+            refreshenv
+            msys2_shell.cmd -defterm -no-start -c "pacman -Syu --noconfirm"
+            msys2_shell.cmd -defterm -no-start -c "pacman -S --noconfirm mingw-w64-x86_64-gsl"
+            # Add GSL to PATH
+            echo "Adding GSL to PATH"
+            setx PATH "%PATH%;C:\msys64\mingw64\bin"
+            # Install RTools on Windows
+            choco install rtools
+          fi
+          
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: 2
