@@ -19,8 +19,8 @@
 #include "eemd_routine.h"
 
 // Main EEMD decomposition routine definition
-libeemd_error_code eemd(double const* restrict input, size_t N,
-		double* restrict output, size_t M,
+libeemd_error_code eemd(double const* __restrict input, size_t N,
+		double* __restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads) {
 	gsl_set_error_handler_off();

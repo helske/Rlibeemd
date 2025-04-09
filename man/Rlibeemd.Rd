@@ -3,6 +3,7 @@
 \docType{package}
 \name{Rlibeemd}
 \alias{Rlibeemd}
+\alias{Rlibeemd-package}
 \title{Rlibeemd: Ensemble empirical mode decomposition (EEMD) and its complete variant (CEEMDAN)}
 \description{
 Package Rlibeemd contains functions for the ensemble empirical mode decomposition (EEMD), 
@@ -25,4 +26,20 @@ Package is based on the libeemd C library: \url{https://bitbucket.org/luukko/lib
   IEEE Int. Conf. on Acoust., Speech and Signal Proc. ICASSP-11,
   (2011) 4144--4147.}
   }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/helske/Rlibeemd/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Jouni Helske \email{jouni.helske@iki.fi} (\href{https://orcid.org/0000-0001-7130-793X}{ORCID}) (R interface)
+
+Authors:
+\itemize{
+  \item Perttu Luukko (\href{https://orcid.org/0000-0003-3786-9685}{ORCID}) (Original libeemd C library)
+}
+
 }

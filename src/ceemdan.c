@@ -19,8 +19,8 @@
 #include "ceemdan.h"
 
 // Main CEEMDAN decomposition routine definition
-libeemd_error_code ceemdan(double const* restrict input, size_t N,
-		double* restrict output, size_t M,
+libeemd_error_code ceemdan(double const* __restrict input, size_t N,
+		double* __restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads) {
 	gsl_set_error_handler_off();
@@ -101,7 +101,7 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 		}
 	} // Return to sequental mode
 	// Allocate memory for the residual shared among all threads
-	double* restrict res = malloc(N*sizeof(double));
+	double* __restrict res = malloc(N*sizeof(double));
 	// For the first iteration the residual is the input signal
 	array_copy(input, N, res);
 	// Each mode is extracted sequentially, but we use parallelization in the inner loop

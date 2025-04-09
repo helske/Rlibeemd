@@ -2,9 +2,8 @@
   
   github_note <- paste0(
     "If you installed Rlibeemd from CRAN, consider installing again from ",
-    "GitHub if you wish to support for parallel computations. ",
-    "See https://github.com/helske/Rlibeemd for details or use",
-    "devtools::install_github('helske/Rlibeemd')")
+    "R-universe for a version supporting parallelization: ",
+    "install.packages('Rlibeemd', repos = 'https://helske.r-universe.dev')")
   
   citation_note <- paste0("\nPlease cite Rlibeemd in publications by using: \n",
     "Luukko PJ, Helske J, R\U00E4s\U00E4nen E (2016). Introducing libeemd:", 

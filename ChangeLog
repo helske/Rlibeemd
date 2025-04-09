@@ -1,5 +1,14 @@
+Changes from version 1.4.3 to 1.4.4:
+  * To comply with CRAN policies, the _Complex is now replaced with Rcomplex,
+    and restrict keyword was replaced with __restrict.
+  * Some minor changes to the C++ code to avoid warnings from implicit 
+    conversions.
+  
+Changes from version 1.4.2 to 1.4.3:
+  * Updated documentation due to roxygen2 changes.
+  
 Changes from version 1.4.1-1 to 1.4.2:
-  * Updateed configure script as requested by CRAN.
+  * Updated configure script as requested by CRAN.
   
 Changes from version 1.4.1 to 1.4.1-1:
   * Changed citation information.

@@ -33,15 +33,15 @@ typedef struct {
 	// Number of samples in the signal
 	size_t N;
 	// Found extrema
-	double* restrict maxx;
-	double* restrict maxy;
-	double* restrict minx;
-	double* restrict miny;
+	double* __restrict maxx;
+	double* __restrict maxy;
+	double* __restrict minx;
+	double* __restrict miny;
 	// Upper and lower envelope spline values
-	double* restrict maxspline;
-	double* restrict minspline;
+	double* __restrict maxspline;
+	double* __restrict minspline;
 	// Extra memory required for spline evaluation
-	double* restrict spline_workspace;
+	double* __restrict spline_workspace;
 } sifting_workspace;
 
 sifting_workspace* allocate_sifting_workspace(size_t N);
@@ -52,9 +52,9 @@ void free_sifting_workspace(sifting_workspace* w);
 typedef struct {
 	size_t N;
 	// Previous residual for EMD
-	double* restrict res;
+	double* __restrict res;
 	// What is needed for sifting
-	sifting_workspace* restrict sift_w;
+	sifting_workspace* __restrict sift_w;
 	// A pointer for shared locks. These locks are used to make EMD thread-safe
 	// even when several threads run EMD with the same output matrix (we'll do
 	// this in EEMD).
@@ -71,9 +71,9 @@ typedef struct {
 	// The random number generator
 	gsl_rng* r;
 	// The ensemble member signal
-	double* restrict x;
+	double* __restrict x;
 	// What is needed for running EMD
-	emd_workspace* restrict emd_w;
+	emd_workspace* __restrict emd_w;
 } eemd_workspace;
 
 eemd_workspace* allocate_eemd_workspace(size_t N);

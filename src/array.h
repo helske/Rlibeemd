@@ -1,7 +1,6 @@
-// For Rlibeemd
-#ifndef restrict
-#define restrict // nothing
-#endif
+// Changes for Rlibeemd:
+// Moved complex versions to array_complex.h
+// defined restrict as __restrict
 
 /* Copyright 2013 Perttu Luukko
  
@@ -25,10 +24,9 @@
 #define _EEMD_ARRAY_H_
 
 #include <string.h>
-#include <complex.h>
 
 // Helper functions for working with data arrays
-static inline void array_copy(double const* restrict src, size_t n, double* restrict dest) {
+static inline void array_copy(double const* __restrict src, size_t n, double* __restrict dest) {
   memcpy(dest, src, n*sizeof(double));
 }
 
@@ -53,22 +51,6 @@ static inline void array_sub(double const* src, size_t n, double* dest) {
 }
 
 static inline void array_mult(double* dest, size_t n, double val) {
-  for (size_t i=0; i<n; i++)
-    dest[i] *= val;
-}
-
-// Versions for complex-valued arrays
-
-static inline void complex_array_copy(double _Complex const* restrict src, size_t n, double _Complex* restrict dest) {
-  memcpy(dest, src, n*sizeof(double _Complex));
-}
-
-static inline void complex_array_sub(double _Complex const* src, size_t n, double _Complex* dest) {
-  for (size_t i=0; i<n; i++)
-    dest[i] -= src[i];
-}
-
-static inline void complex_array_mult(double _Complex* dest, size_t n, double val) {
   for (size_t i=0; i<n; i++)
     dest[i] *= val;
 }

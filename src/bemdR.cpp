@@ -18,11 +18,17 @@ ComplexMatrix bemdR(ComplexVector input, NumericVector directions,
   }
   size_t D = directions.size();
   
-  ComplexMatrix output(N,M);
+  ComplexMatrix output(static_cast<int>(N), static_cast<int>(M));
   
-  libeemd_error_code err = bemd(reinterpret_cast<double _Complex const*>(input.begin()), N, 
-    directions.begin(), D, reinterpret_cast<double _Complex*>(output.begin()), M, num_siftings);
- 
+  libeemd_error_code err = bemd(
+    reinterpret_cast<const Rcomplex*>(input.begin()), N,
+    directions.begin(), D,
+    reinterpret_cast<Rcomplex*>(output.begin()), M, num_siftings
+  );
+  // 
+  // libeemd_error_code err = bemd(reinterpret_cast<double _Complex const*>(input.begin()), N, 
+  //   directions.begin(), D, reinterpret_cast<double _Complex*>(output.begin()), M, num_siftings);
+  // 
   if(err!=EMD_SUCCESS){
     printError(err);
   }

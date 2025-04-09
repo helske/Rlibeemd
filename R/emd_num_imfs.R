@@ -10,5 +10,5 @@
 emd_num_imfs <- function(N) {  
   if (!isTRUE(N > 0) || !isTRUE(abs(N - round(N)) < 100 * .Machine$double.eps))
     stop("N must be a positive integer.")
-  emd_num_imfsR(N)
+  emd_num_imfsR(as.integer(N))
 }

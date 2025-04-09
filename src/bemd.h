@@ -1,3 +1,5 @@
+// Changes for Rlibeemd:
+// Use Rcomplex instead of _Complex
 /* Copyright 2013 Perttu Luukko
  
  * This file is part of libeemd.
@@ -19,10 +21,11 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <math.h>
-#include <complex.h>
+//#include <complex.h>
+#include <R_ext/Complex.h> // For Rlibeemd
 #include <gsl/gsl_errno.h>
 
-#include "array.h"
+#include "array_complex.h" // For Rlibeemd
 #include "lock.h"
 #include "extrema.h"
 #include "spline.h"
@@ -35,9 +38,9 @@
 //
 // Parameters 'directions' and 'num_directions' define a vector of directions (phi_k in
 // the article) used for the decomposition. 
-libeemd_error_code bemd(double _Complex const* restrict input, size_t N,
-  double const* restrict directions, size_t num_directions,
-  double _Complex* restrict output, size_t M,
+libeemd_error_code bemd(const Rcomplex* input, size_t N,
+  double const* __restrict directions, size_t num_directions,
+  Rcomplex* output, size_t M,
   unsigned int num_siftings);
 
 // For BEMD sifting we need arrays for storing the found maxima of the signal,
@@ -49,13 +52,13 @@ typedef struct {
   // Input signal projected to a particular direction in the complex plane
   double* projected_signal;
   // Found maxima
-  double* restrict maxx;
-  double* restrict maxy;
+  double* __restrict maxx;
+  double* __restrict maxy;
   size_t num_max;
   // Upper and lower envelope spline values
-  double* restrict maxspline;
+  double* __restrict maxspline;
   // Extra memory required for spline evaluation
-  double* restrict spline_workspace;
+  double* __restrict spline_workspace;
   // Lock
   lock* output_lock;
 } bemd_sifting_workspace;

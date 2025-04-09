@@ -61,12 +61,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // emd_num_imfsR
-int emd_num_imfsR(double N);
+int emd_num_imfsR(unsigned int N);
 RcppExport SEXP _Rlibeemd_emd_num_imfsR(SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type N(NSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type N(NSEXP);
     rcpp_result_gen = Rcpp::wrap(emd_num_imfsR(N));
     return rcpp_result_gen;
 END_RCPP

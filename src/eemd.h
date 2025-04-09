@@ -5,7 +5,6 @@
 //   emd_report_if_error
 //   emd_report_to_file_if_error
 // Moved bemd to bemd.h 
-// (otherwise gives weird errors likely due to differences of complex stuff in C/C++)
 
 #include "extras.h"
 
@@ -41,7 +40,7 @@
 #endif
 
 #include <stddef.h>
-#include <complex.h>
+//#include <complex.h>
 #include <stdbool.h>
 // No need for this in Rlibeemd
 //#include <stdio.h>
@@ -77,8 +76,8 @@
 //
 // To compute the original EMD decomposition you can use this function with
 // ensemble_size = 1 and noise_strength = 0.
-libeemd_error_code eemd(double const* restrict input, size_t N,
-		double* restrict output, size_t M,
+libeemd_error_code eemd(double const* __restrict input, size_t N,
+		double* __restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 
@@ -89,8 +88,8 @@ libeemd_error_code eemd(double const* restrict input, size_t N,
 //   (2011) 4144-4147
 //
 // Parameters are identical to routine eemd
-libeemd_error_code ceemdan(double const* restrict input, size_t N,
-		double* restrict output, size_t M,
+libeemd_error_code ceemdan(double const* __restrict input, size_t N,
+		double* __restrict output, size_t M,
 		unsigned int ensemble_size, double noise_strength, unsigned int
 		S_number, unsigned int num_siftings, unsigned long int rng_seed, int threads);
 
@@ -99,9 +98,9 @@ libeemd_error_code ceemdan(double const* restrict input, size_t N,
 // extrema and their number are passed as the rest of the parameters. The
 // arrays for the coordinates must be at least size N. The method also checks whether
 // found minima are negative and maxima are positive, and returns this as boolean value.
-bool emd_find_extrema(double const* restrict x, size_t N,
-		double* restrict maxx, double* restrict maxy, size_t* num_max_ptr,
-		double* restrict minx, double* restrict miny, size_t* num_min_ptr);
+bool emd_find_extrema(double const* __restrict x, size_t N,
+		double* __restrict maxx, double* __restrict maxy, size_t* num_max_ptr,
+		double* __restrict minx, double* __restrict miny, size_t* num_min_ptr);
 
 // Return the number of IMFs that can be extracted from input data of length N,
 // including the final residual.
@@ -119,7 +118,7 @@ size_t emd_num_imfs(size_t N);
 //
 // This routine is mainly exported so that it can be tested separately to
 // produce identical results to the Matlab routine 'spline'.
-libeemd_error_code emd_evaluate_spline(double const* restrict x, double const* restrict y,
-		size_t N, double* restrict spline_y, double* spline_workspace);
+libeemd_error_code emd_evaluate_spline(double const* __restrict x, double const* __restrict y,
+		size_t N, double* __restrict spline_y, double* spline_workspace);
 
 #endif // _EEMD_H_
