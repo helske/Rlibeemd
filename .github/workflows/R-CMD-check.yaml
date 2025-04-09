@@ -40,7 +40,7 @@ jobs:
         with:
           cache-version: 2
           needs: check
-           extra-packages: rcmdcheck
+          extra-packages: rcmdcheck
 
       - uses: r-lib/actions/check-r-package@v2
       
